@@ -31,6 +31,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\EZSubmitApp.Core\EZSubmitApp.Core.csproj" />
     <ProjectReference Include="..\EZSubmitApp.Infrastructure\EZSubmitApp.Infrastructure.csproj" />
   </ItemGroup>
 

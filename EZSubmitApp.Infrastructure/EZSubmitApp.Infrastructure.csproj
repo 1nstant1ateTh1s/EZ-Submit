@@ -24,4 +24,8 @@
     </PackageReference>
   </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\EZSubmitApp.Core\EZSubmitApp.Core.csproj" />
+  </ItemGroup>
+
 </Project>
