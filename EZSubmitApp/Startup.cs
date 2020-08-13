@@ -11,6 +11,8 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using EZSubmitApp.Infrastructure.Data;
 using EZSubmitApp.Core.Entities;
+using EZSubmitApp.Infrastructure.Extensions;
+using System;
 
 namespace EZSubmitApp
 {
@@ -26,22 +28,7 @@ namespace EZSubmitApp
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddDbContext<EZSubmitDbContext>(options =>
-                options.UseSqlServer(
-                    Configuration.GetConnectionString("DefaultConnection")));
-
-            services.AddDefaultIdentity<ApplicationUser>(options =>
-            {
-                options.SignIn.RequireConfirmedAccount = true;
-            })
-                .AddRoles<IdentityRole>()
-                .AddEntityFrameworkStores<EZSubmitDbContext>();
-
-            services.AddIdentityServer()
-                .AddApiAuthorization<ApplicationUser, EZSubmitDbContext>();
-
-            services.AddAuthentication()
-                .AddIdentityServerJwt();
+            services.AddDbLayer(Configuration.GetConnectionString("DefaultConnection"));
 
             services.AddControllersWithViews();
             services.AddRazorPages();
@@ -53,7 +40,7 @@ namespace EZSubmitApp
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
+        public void Configure(IApplicationBuilder app, IWebHostEnvironment env, IServiceProvider serviceProvider)
         {
             if (env.IsDevelopment())
             {
@@ -99,6 +86,8 @@ namespace EZSubmitApp
                     pattern: "{controller}/{action=Index}/{id?}");
                 endpoints.MapRazorPages();
             });
+
+            app.UseDbLayer(serviceProvider);
 
             app.UseSpa(spa =>
             {
