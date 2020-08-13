@@ -30,7 +30,11 @@ namespace EZSubmitApp
                 options.UseSqlServer(
                     Configuration.GetConnectionString("DefaultConnection")));
 
-            services.AddDefaultIdentity<ApplicationUser>(options => options.SignIn.RequireConfirmedAccount = true)
+            services.AddDefaultIdentity<ApplicationUser>(options =>
+            {
+                options.SignIn.RequireConfirmedAccount = true;
+            })
+                .AddRoles<IdentityRole>()
                 .AddEntityFrameworkStores<EZSubmitDbContext>();
 
             services.AddIdentityServer()
@@ -38,6 +42,7 @@ namespace EZSubmitApp
 
             services.AddAuthentication()
                 .AddIdentityServerJwt();
+
             services.AddControllersWithViews();
             services.AddRazorPages();
             // In production, the Angular files will be served from this directory
