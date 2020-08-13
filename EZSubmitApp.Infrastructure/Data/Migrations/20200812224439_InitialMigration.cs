@@ -1,9 +1,9 @@
 ﻿using System;
 using Microsoft.EntityFrameworkCore.Migrations;
 
-namespace EZSubmitApp.Data.Migrations
+namespace EZSubmitApp.Infrastructure.Data.Migrations
 {
-    public partial class CreateIdentitySchema : Migration
+    public partial class InitialMigration : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -39,7 +39,16 @@ namespace EZSubmitApp.Data.Migrations
                     TwoFactorEnabled = table.Column<bool>(nullable: false),
                     LockoutEnd = table.Column<DateTimeOffset>(nullable: true),
                     LockoutEnabled = table.Column<bool>(nullable: false),
-                    AccessFailedCount = table.Column<int>(nullable: false)
+                    AccessFailedCount = table.Column<int>(nullable: false),
+                    IsActive = table.Column<bool>(nullable: false),
+                    FirstName = table.Column<string>(nullable: true),
+                    LastName = table.Column<string>(nullable: true),
+                    Address1 = table.Column<string>(nullable: true),
+                    Address2 = table.Column<string>(nullable: true),
+                    City = table.Column<string>(nullable: true),
+                    State = table.Column<string>(nullable: true),
+                    Zip = table.Column<string>(nullable: true),
+                    BarNumber = table.Column<string>(nullable: true)
                 },
                 constraints: table =>
                 {
@@ -186,6 +195,91 @@ namespace EZSubmitApp.Data.Migrations
                         onDelete: ReferentialAction.Cascade);
                 });
 
+            migrationBuilder.CreateTable(
+                name: "CaseForm",
+                columns: table => new
+                {
+                    Id = table.Column<int>(nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    CreatedDate = table.Column<DateTime>(nullable: false, defaultValueSql: "GetDate()"),
+                    ModifiedDate = table.Column<DateTime>(nullable: true, defaultValueSql: "GetDate()"),
+                    FormType = table.Column<string>(nullable: false),
+                    CaseNumber = table.Column<string>(nullable: false),
+                    HearingDateTime = table.Column<DateTime>(nullable: false),
+                    PlaintiffType = table.Column<string>(maxLength: 1, nullable: false),
+                    PlaintiffName = table.Column<string>(maxLength: 150, nullable: false),
+                    PlaintiffTaDbaType = table.Column<string>(maxLength: 3, nullable: true),
+                    PlaintiffTaDbaName = table.Column<string>(maxLength: 50, nullable: true),
+                    PlaintiffAddress1 = table.Column<string>(maxLength: 50, nullable: true),
+                    PlaintiffAddress2 = table.Column<string>(maxLength: 50, nullable: true),
+                    PlaintiffPhone = table.Column<string>(nullable: true),
+                    DefendantType = table.Column<string>(maxLength: 1, nullable: false),
+                    DefendantName = table.Column<string>(maxLength: 150, nullable: false),
+                    DefendantTaDbaName = table.Column<string>(maxLength: 50, nullable: true),
+                    DefendantAddress1 = table.Column<string>(maxLength: 50, nullable: true),
+                    DefendantAddress2 = table.Column<string>(maxLength: 50, nullable: true),
+                    Defendant2Type = table.Column<string>(maxLength: 1, nullable: true),
+                    Defendant2Name = table.Column<string>(maxLength: 150, nullable: true),
+                    Defendant2TaDbaName = table.Column<string>(maxLength: 50, nullable: true),
+                    Defendant2Address1 = table.Column<string>(maxLength: 50, nullable: true),
+                    Defendant2Address2 = table.Column<string>(maxLength: 50, nullable: true),
+                    SubmittedById = table.Column<string>(nullable: true),
+                    SubmissionDateTime = table.Column<DateTime>(nullable: false, defaultValueSql: "GetDate()"),
+                    TransferredToState = table.Column<bool>(nullable: false),
+                    TransferDateTime = table.Column<DateTime>(nullable: true),
+                    IsReadyToTransmit = table.Column<bool>(nullable: false),
+                    Principle = table.Column<decimal>(type: "decimal(18,2)", nullable: true),
+                    RentPeriodStartDate = table.Column<DateTime>(nullable: true),
+                    RentPeriodEndDate = table.Column<DateTime>(nullable: true),
+                    LateFee = table.Column<decimal>(type: "decimal(18,2)", nullable: true),
+                    DamagesAmount = table.Column<decimal>(type: "decimal(18,2)", nullable: true),
+                    DamagesFor = table.Column<string>(maxLength: 20, nullable: true),
+                    Interest = table.Column<decimal>(type: "decimal(18,2)", nullable: true),
+                    InterestStartDate = table.Column<DateTime>(nullable: true),
+                    UseDoj = table.Column<bool>(nullable: true),
+                    FilingCost = table.Column<decimal>(type: "decimal(18,2)", nullable: true),
+                    CivilRecoveryAmount = table.Column<decimal>(type: "decimal(18,2)", nullable: true),
+                    AttorneyFees = table.Column<decimal>(type: "decimal(18,2)", nullable: true),
+                    IsAmountDueAtHearing = table.Column<bool>(nullable: true),
+                    UseToTerminateTenancy = table.Column<bool>(nullable: true),
+                    AccountType = table.Column<string>(nullable: true),
+                    AccountTypeOther = table.Column<string>(nullable: true),
+                    HomesteadExemptionWaived = table.Column<string>(nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_CaseForm", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_CaseForm_AspNetUsers_SubmittedById",
+                        column: x => x.SubmittedById,
+                        principalTable: "AspNetUsers",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "DocxAttachment",
+                columns: table => new
+                {
+                    Id = table.Column<int>(nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    CreatedDate = table.Column<DateTime>(nullable: false, defaultValueSql: "GetDate()"),
+                    ModifiedDate = table.Column<DateTime>(nullable: true, defaultValueSql: "GetDate()"),
+                    OutputName = table.Column<string>(nullable: true),
+                    Content = table.Column<byte[]>(nullable: true),
+                    CaseFormId = table.Column<int>(nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_DocxAttachment", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_DocxAttachment_CaseForm_CaseFormId",
+                        column: x => x.CaseFormId,
+                        principalTable: "CaseForm",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
             migrationBuilder.CreateIndex(
                 name: "IX_AspNetRoleClaims_RoleId",
                 table: "AspNetRoleClaims",
@@ -226,6 +320,11 @@ namespace EZSubmitApp.Data.Migrations
                 filter: "[NormalizedUserName] IS NOT NULL");
 
             migrationBuilder.CreateIndex(
+                name: "IX_CaseForm_SubmittedById",
+                table: "CaseForm",
+                column: "SubmittedById");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_DeviceCodes_DeviceCode",
                 table: "DeviceCodes",
                 column: "DeviceCode",
@@ -235,6 +334,12 @@ namespace EZSubmitApp.Data.Migrations
                 name: "IX_DeviceCodes_Expiration",
                 table: "DeviceCodes",
                 column: "Expiration");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_DocxAttachment_CaseFormId",
+                table: "DocxAttachment",
+                column: "CaseFormId",
+                unique: true);
 
             migrationBuilder.CreateIndex(
                 name: "IX_PersistedGrants_Expiration",
@@ -268,10 +373,16 @@ namespace EZSubmitApp.Data.Migrations
                 name: "DeviceCodes");
 
             migrationBuilder.DropTable(
+                name: "DocxAttachment");
+
+            migrationBuilder.DropTable(
                 name: "PersistedGrants");
 
             migrationBuilder.DropTable(
                 name: "AspNetRoles");
+
+            migrationBuilder.DropTable(
+                name: "CaseForm");
 
             migrationBuilder.DropTable(
                 name: "AspNetUsers");
