@@ -29,6 +29,13 @@ namespace EZSubmitApp.Infrastructure.Data
                     var userManager = serviceScope.ServiceProvider.GetService<UserManager<ApplicationUser>>();
                     await SeedDefaultUsers(userManager);
                 }
+
+                //if (!await context.CaseForms.AnyAsync())
+                //{
+                //    // Create the default case forms
+                //    var userManager = serviceScope.ServiceProvider.GetService<UserManager<ApplicationUser>>();
+                //    await SeedCaseForms(context, userManager);
+                //}
             }
             catch (Exception exception)
             {
@@ -106,6 +113,55 @@ namespace EZSubmitApp.Infrastructure.Data
                 // Assign the "RegisteredUser" role
                 await userManager.AddToRoleAsync(defaultUser, AuthorizationConstants.Roles.USER);
             }
+        }
+
+        private static async Task SeedCaseForms(EZSubmitDbContext context, UserManager<ApplicationUser> userManager)
+        {
+            // TODO: Pull these email address values from configuration
+            string EMAIL_USER = "ambrown@cityofchesapeake.net";
+
+            var firstCaseForm = new WarrantInDebtForm
+            {
+                CaseNumber = "00199990",
+                HearingDateTime = DateTime.Parse("3/18/2021 10:00:00 AM"), 
+                PlaintiffType = "I",
+                PlaintiffName = "Brown, Andrew M",
+                PlaintiffTaDbaType = "DBA",
+                PlaintiffTaDbaName = "AB The Good",
+                PlaintiffAddress1 = "300 Cedar Rd",
+                PlaintiffAddress2 = "Chesapeake, VA 23323",
+                PlaintiffPhone = "757-444-4444",
+                DefendantType = "I",
+                DefendantName = "Sneed, Jason A",
+                DefendantTaDbaName = "JAS",
+                DefendantAddress1 = "3140 Jason's Rd",
+                DefendantAddress2 = "Chesapeake, VA 23321",
+                Defendant2Type = "C",
+                Defendant2Name = "Monsato",
+                Defendant2TaDbaName = "Monsato Inc",
+                Defendant2Address1 = "296 Far Out There",
+                Defendant2Address2 = "Chesapeake, VA 20090",
+                SubmittedBy = await userManager.FindByNameAsync(EMAIL_USER),
+                SubmissionDateTime = DateTime.Parse("7/13/2020 3:39:51 PM"),
+                TransferredToState = false,
+                IsReadyToTransmit = false,
+                Principle = 500.50m,
+                Interest = 4.30m,
+                InterestStartDate = DateTime.Parse("10/21/2019 4:00:00 AM"),
+                UseDoj = false,
+                FilingCost = 135.87m,
+                AttorneyFees = 402.00m,
+                AccountType = "Other",
+                AccountTypeOther = "An other account type",
+                HomesteadExemptionWaived = "Cannot be determined"
+                //DocxAttachment = new DocxAttachment
+                //{
+                //    OutputName = "Generated_Warrant_In_Debt_00199990.docx",
+                //    Content = "0x504B0304140006080800000021001E911AB7EB0000004E0200000B0008025F72656C732F2E72656C7320A2040228A0000200000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000"
+                //}
+            };
+            context.CaseForms.Add(firstCaseForm);
+            await context.SaveChangesAsync();
         }
     }
 }
