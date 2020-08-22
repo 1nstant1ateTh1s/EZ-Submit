@@ -31,7 +31,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\DocxConverter\DocxConverterService.csproj" />
+    <ProjectReference Include="..\DocxConverterService\DocxConverterService.csproj" />
     <ProjectReference Include="..\EZSubmitApp.Core\EZSubmitApp.Core.csproj" />
     <ProjectReference Include="..\EZSubmitApp.Infrastructure\EZSubmitApp.Infrastructure.csproj" />
   </ItemGroup>
