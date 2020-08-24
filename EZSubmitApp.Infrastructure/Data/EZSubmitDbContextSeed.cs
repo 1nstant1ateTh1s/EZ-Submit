@@ -1,4 +1,5 @@
-﻿using EZSubmitApp.Core.Constants;
+﻿using EZSubmitApp.Core.Configuration;
+using EZSubmitApp.Core.Constants;
 using EZSubmitApp.Core.Entities;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
@@ -10,7 +11,7 @@ namespace EZSubmitApp.Infrastructure.Data
 {
     public class EZSubmitDbContextSeed
     {
-        public static async Task SeedAsync(EZSubmitDbContext context, IServiceScope serviceScope, int? retry = 0)
+        public static async Task SeedAsync(EZSubmitDbContext context, IServiceScope serviceScope, AspnetRunSettings aspnetRunSettings, int? retry = 0)
         {
             int retryForAvailability = retry.Value;
 
@@ -27,15 +28,15 @@ namespace EZSubmitApp.Infrastructure.Data
                 {
                     // Create the default users (if they don't exist yet)
                     var userManager = serviceScope.ServiceProvider.GetService<UserManager<ApplicationUser>>();
-                    await SeedDefaultUsers(userManager);
+                    await SeedDefaultUsers(userManager, aspnetRunSettings.Seeding.DefaultAdminEmail, aspnetRunSettings.Seeding.DefaultUserEmail);
                 }
 
-                //if (!await context.CaseForms.AnyAsync())
-                //{
-                //    // Create the default case forms
-                //    var userManager = serviceScope.ServiceProvider.GetService<UserManager<ApplicationUser>>();
-                //    await SeedCaseForms(context, userManager);
-                //}
+                if (!await context.CaseForms.AnyAsync())
+                {
+                    // Create the default case forms
+                    var userManager = serviceScope.ServiceProvider.GetService<UserManager<ApplicationUser>>();
+                    await SeedCaseForms(context, userManager, aspnetRunSettings.Seeding.DefaultUserEmail);
+                }
             }
             catch (Exception exception)
             {
@@ -45,7 +46,7 @@ namespace EZSubmitApp.Infrastructure.Data
 
                     // TODO: get logger and log error
 
-                    await SeedAsync(context, serviceScope, retryForAvailability);
+                    await SeedAsync(context, serviceScope, aspnetRunSettings, retryForAvailability);
                 }
 
                 throw;
@@ -65,11 +66,10 @@ namespace EZSubmitApp.Infrastructure.Data
             }
         }
 
-        private static async Task SeedDefaultUsers(UserManager<ApplicationUser> userManager)
+        private static async Task SeedDefaultUsers(UserManager<ApplicationUser> userManager, string defaultAdminEmail, string defaultUserEmail)
         {
-            // TODO: Pull these email address values from configuration
-            string EMAIL_ADMIN = "admin@test.com";
-            string EMAIL_USER = "ambrown@cityofchesapeake.net";
+            string EMAIL_ADMIN = defaultAdminEmail;
+            string EMAIL_USER = defaultUserEmail;
 
             // Check if the admin user already exists
             if (await userManager.FindByNameAsync(EMAIL_ADMIN) == null)
@@ -115,10 +115,9 @@ namespace EZSubmitApp.Infrastructure.Data
             }
         }
 
-        private static async Task SeedCaseForms(EZSubmitDbContext context, UserManager<ApplicationUser> userManager)
+        private static async Task SeedCaseForms(EZSubmitDbContext context, UserManager<ApplicationUser> userManager, string defaultUserEmail)
         {
-            // TODO: Pull these email address values from configuration
-            string EMAIL_USER = "ambrown@cityofchesapeake.net";
+            string EMAIL_USER = defaultUserEmail;
 
             var firstCaseForm = new WarrantInDebtForm
             {

@@ -1,4 +1,5 @@
-﻿using EZSubmitApp.Core.Entities;
+﻿using EZSubmitApp.Core.Configuration;
+using EZSubmitApp.Core.Entities;
 using EZSubmitApp.Infrastructure.Data;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Builder;
@@ -38,7 +39,7 @@ namespace EZSubmitApp.Infrastructure.Extensions
             return services;
         }
 
-        public static async void UseDbLayer(this IApplicationBuilder app, IServiceProvider serviceProvider)
+        public static async void UseDbLayer(this IApplicationBuilder app, IServiceProvider serviceProvider, AspnetRunSettings aspnetRunSettings)
         {
             using (var serviceScope = serviceProvider.GetService<IServiceScopeFactory>().CreateScope())
             {
@@ -49,7 +50,7 @@ namespace EZSubmitApp.Infrastructure.Extensions
                 //      before trying to Seed?
                 // context.Database.Migrate();
 
-                await EZSubmitDbContextSeed.SeedAsync(context, serviceScope);
+                await EZSubmitDbContextSeed.SeedAsync(context, serviceScope, aspnetRunSettings);
             }
         }
 

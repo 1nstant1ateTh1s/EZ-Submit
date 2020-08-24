@@ -16,6 +16,7 @@ using System;
 using System.IO;
 using DocxConverterService.Interfaces;
 using DocxConverterService;
+using EZSubmitApp.Core.Configuration;
 
 namespace EZSubmitApp
 {
@@ -25,15 +26,17 @@ namespace EZSubmitApp
         {
             Configuration = configuration;
             WebHostEnvironment = env;
+            AspnetRunSettings = configuration.Get<AspnetRunSettings>();
         }
 
         public IConfiguration Configuration { get; }
         public IWebHostEnvironment WebHostEnvironment { get; }
+        public AspnetRunSettings AspnetRunSettings { get; }
 
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddDbLayer(Configuration.GetConnectionString("DefaultConnection"));
+            services.AddDbLayer(AspnetRunSettings.ConnectionStrings.DefaultConnection);
 
             // Configure DocxConverter service
             services.Configure<DocxConverterConfiguration>(Configuration.GetSection("DocxConverterConfiguration"));
@@ -102,7 +105,7 @@ namespace EZSubmitApp
                 endpoints.MapRazorPages();
             });
 
-            app.UseDbLayer(serviceProvider);
+            app.UseDbLayer(serviceProvider, AspnetRunSettings);
 
             app.UseSpa(spa =>
             {
