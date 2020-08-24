@@ -8,7 +8,6 @@ namespace EZSubmitApp.Core.IRepositories
     public interface ICaseFormRepository : IAsyncRepository<CaseForm>
     {
         Task<IEnumerable<CaseForm>> GetCaseFormsAsync();
-        Task<CaseForm> GetCaseFormByIdAsync(int caseFormId);
         Task<IEnumerable<CaseForm>> GetCaseFormsByUserAsync(string userName);
     }
 }

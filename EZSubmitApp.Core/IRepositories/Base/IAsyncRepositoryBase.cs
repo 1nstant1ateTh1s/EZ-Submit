@@ -1,5 +1,5 @@
 ﻿using EZSubmitApp.Core.Entities.Base;
-using EZSubmitApp.Core.Interfaces;
+using EZSubmitApp.Core.Specifications.Base;
 using System;
 using System.Collections.Generic;
 using System.Linq.Expressions;

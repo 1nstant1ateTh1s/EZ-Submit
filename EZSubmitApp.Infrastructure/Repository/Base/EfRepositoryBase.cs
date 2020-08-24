@@ -1,6 +1,6 @@
 ﻿using EZSubmitApp.Core.Entities.Base;
-using EZSubmitApp.Core.Interfaces;
 using EZSubmitApp.Core.IRepositories.Base;
+using EZSubmitApp.Core.Specifications.Base;
 using EZSubmitApp.Infrastructure.Data;
 using Microsoft.EntityFrameworkCore;
 using System;

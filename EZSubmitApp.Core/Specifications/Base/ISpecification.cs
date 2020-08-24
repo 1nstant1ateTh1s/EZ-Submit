@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Linq.Expressions;
 
-namespace EZSubmitApp.Core.Interfaces
+namespace EZSubmitApp.Core.Specifications.Base
 {
     public interface ISpecification<T>
     {
