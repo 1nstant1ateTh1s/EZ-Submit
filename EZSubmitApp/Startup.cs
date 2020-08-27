@@ -17,6 +17,10 @@ using System.IO;
 using DocxConverterService.Interfaces;
 using DocxConverterService;
 using EZSubmitApp.Core.Configuration;
+using EZSubmitApp.Core.JsonConverters;
+using System.Text.Json;
+using EZSubmitApp.Core.Constants;
+using System.Collections.Generic;
 
 namespace EZSubmitApp
 {
@@ -48,7 +52,21 @@ namespace EZSubmitApp
             });
             services.AddScoped<IDocxConverter, DocxConverter>();
 
-            services.AddControllersWithViews();
+            services.AddControllersWithViews()
+                .AddJsonOptions(options => {
+                    options.JsonSerializerOptions.PropertyNameCaseInsensitive = true;
+                    options.JsonSerializerOptions.PropertyNamingPolicy = JsonNamingPolicy.CamelCase;
+                    options.JsonSerializerOptions.WriteIndented = true;
+                    //options.JsonSerializerOptions.Converters.Add(new CaseFormConverterWithTypeDiscriminator<CaseForm>(
+                    //    new Dictionary<string, Type>(StringComparer.OrdinalIgnoreCase)
+                    //    {
+                    //        { CaseFormTypes.WARRANT_IN_DEBT, typeof(WarrantInDebtForm) },
+                    //        { CaseFormTypes.SUMMONS_FOR_UNLAWFUL_DETAINER, typeof(SummonsForUnlawfulDetainerForm) }
+                    //    })
+                    //);
+                    options.JsonSerializerOptions.Converters.Add(new CaseFormJsonConverter());
+                });
+
             services.AddRazorPages();
             // In production, the Angular files will be served from this directory
             services.AddSpaStaticFiles(configuration =>

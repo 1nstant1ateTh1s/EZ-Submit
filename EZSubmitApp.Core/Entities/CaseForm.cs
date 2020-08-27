@@ -1,8 +1,16 @@
-﻿using EZSubmitApp.Core.Entities.Base;
+﻿using EZSubmitApp.Core.Constants;
+using EZSubmitApp.Core.Entities.Base;
+using EZSubmitApp.Core.Interfaces;
+using EZSubmitApp.Core.JsonConverters;
 using System;
+using System.Collections.Generic;
+using System.Text.Json.Serialization;
 
 namespace EZSubmitApp.Core.Entities
 {
+    //[JsonConverter(typeof(CaseFormConverterWithTypeDiscriminator<CaseForm>))]
+    //[JsonConverter(typeof(AsRuntimeTypeConverter<CaseForm>))]
+    //public abstract class CaseForm : IntBaseEntity, ICaseForm
     public abstract class CaseForm : IntBaseEntity
     {
         public CaseForm()
