@@ -78,7 +78,28 @@ namespace EZSubmitApp.Controllers
                 return BadRequest();
             }
 
-            _context.Entry(caseForm).State = EntityState.Modified;
+            WarrantInDebtForm form = caseForm as WarrantInDebtForm;
+            //_context.Entry(form).State = EntityState.Modified;
+
+            var caseFormFromRepo = await _context.CaseForms.FindAsync(id) as WarrantInDebtForm;
+            if (caseFormFromRepo == null)
+            {
+                _logger.LogWarning(LoggingEvents.UpdateItemNotFound, "UPDATE FAILED: Case form {Id} NOT FOUND", id);
+                return NotFound();
+            }
+
+            // TODO: Updates only work when I manually map properties after retrieving existing entity from DB.
+            // TODO: Will replace with DTO and AutoMapper mapping profile
+            caseFormFromRepo.CaseNumber = form.CaseNumber;
+            caseFormFromRepo.AttorneyFees = form.AttorneyFees;
+            caseFormFromRepo.FilingCost = form.FilingCost;
+            caseFormFromRepo.Interest = form.Interest;
+            caseFormFromRepo.SubmittedById = form.SubmittedById;
+            // ...
+
+            //caseForm.FormType = "WD";
+            //_context.Entry(caseForm).State = EntityState.Modified;
+
             try
             {
                 await _context.SaveChangesAsync();
@@ -96,6 +117,11 @@ namespace EZSubmitApp.Controllers
                     throw;
                 }
             }
+            //catch (Exception ex)
+            //{
+            //    var e = ex;
+            //    throw ex;
+            //}
 
             return NoContent();
         }

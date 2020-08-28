@@ -65,6 +65,8 @@ namespace EZSubmitApp
                     //    })
                     //);
                     options.JsonSerializerOptions.Converters.Add(new CaseFormJsonConverter());
+                    options.JsonSerializerOptions.Converters.Add(new DecimalJsonConverter());
+                    options.JsonSerializerOptions.Converters.Add(new NullableDateTimeJsonConverter());
                 });
 
             services.AddRazorPages();

@@ -5,6 +5,11 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="Data\Migrations\20200828205042_TestNonEnumForFormTypeDiscriminator.cs" />
+    <Compile Remove="Data\Migrations\20200828205042_TestNonEnumForFormTypeDiscriminator.Designer.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
     <Folder Include="Entities\" />
     <Folder Include="Exceptions\" />
     <Folder Include="Identity\" />
