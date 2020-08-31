@@ -7,7 +7,6 @@
   <ItemGroup>
     <Folder Include="Extensions\" />
     <Folder Include="Exceptions\" />
-    <Folder Include="Mapper\Profiles\" />
     <Folder Include="Services\" />
   </ItemGroup>
 
