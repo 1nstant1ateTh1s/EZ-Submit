@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace EZSubmitApp.Core.IRepositories.Base
 {
-    public interface IAsyncRepositoryBase<T, TId> where T : IBaseEntity<TId>
+    public interface IAsyncRepositoryBase<T, TId> : IRepository where T : IBaseEntity<TId>
     {
         Task<T> GetByIdAsync(int id);
         Task<IReadOnlyList<T>> ListAllAsync();

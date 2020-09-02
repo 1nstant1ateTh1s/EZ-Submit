@@ -1,5 +1,6 @@
 ﻿using EZSubmitApp.Core.Configuration;
 using EZSubmitApp.Core.Entities;
+using EZSubmitApp.Core.IRepositories.Base;
 using EZSubmitApp.Infrastructure.Data;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Builder;
@@ -7,6 +8,8 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using System;
+using System.Linq;
+using System.Reflection;
 
 namespace EZSubmitApp.Infrastructure.Extensions
 {
@@ -35,6 +38,8 @@ namespace EZSubmitApp.Infrastructure.Extensions
             services.AddAuthentication()
                 .AddIdentityServerJwt();
 
+            services.AddAllRepositories(typeof(DBExtensions).Assembly);
+
             // Chain pattern
             return services;
         }
@@ -54,6 +59,31 @@ namespace EZSubmitApp.Infrastructure.Extensions
             }
         }
 
-
+        /// <summary>
+        /// Registers repository services found within the specified assembly.
+        /// </summary>
+        /// <param name="services">The service collection being extended.</param>
+        /// <param name="assembly">The target assembly for repository services to register.</param>
+        /// <returns>Chained pattern for service collection.</returns>
+        public static IServiceCollection AddAllRepositories
+           (this IServiceCollection services, Assembly assembly)
+        {
+            // We will all register concrete repositories that are of type IRepository
+            var repositories = assembly.GetTypes()
+                .Where(x => !x.IsAbstract && x.IsClass
+                && typeof(IRepository).IsAssignableFrom(x));
+            foreach (var repository in repositories)
+            {
+                var repositoryInterface = repository.GetInterfaces()
+                    .Where(i => !i.IsGenericType && typeof(IRepository) != i
+                            && typeof(IRepository).IsAssignableFrom(i))
+                    .SingleOrDefault();
+                if (repositoryInterface != null)
+                {
+                    services.AddScoped(repositoryInterface, repository);
+                }
+            }
+            return services;
+        }
     }
 }

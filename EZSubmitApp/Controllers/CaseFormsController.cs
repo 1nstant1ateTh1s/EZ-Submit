@@ -1,10 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using DocumentFormat.OpenXml.Bibliography;
 using EZSubmitApp.Core.Constants;
 using EZSubmitApp.Core.Entities;
+using EZSubmitApp.Core.Interfaces;
 using EZSubmitApp.Infrastructure.Data;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -18,41 +18,43 @@ namespace EZSubmitApp.Controllers
     [ApiController]
     public class CaseFormsController : ControllerBase
     {
+        private readonly ICaseFormService _caseFormService;
         private readonly ILogger _logger;
         private readonly EZSubmitDbContext _context;
 
         public CaseFormsController(
+            ICaseFormService caseFormService,
             ILogger<CaseFormsController> logger,
             EZSubmitDbContext context)
         {
+            _caseFormService = caseFormService;
             _logger = logger;
             _context = context;
         }
 
         // GET: api/CaseForms
         [HttpGet]
+        [HttpHead]
         public async Task<ActionResult<IEnumerable<CaseForm>>> Get()
         {
-            _logger.LogInformation(LoggingEvents.ListItems, "Listing all case forms from database.");
-
-            return await _context.CaseForms.ToListAsync();
+            var caseForms = await _caseFormService.GetCaseForms();
+            return Ok(caseForms);
         }
 
         // GET: api/CaseForms/5
         [HttpGet("{id}")]
         public async Task<ActionResult<CaseForm>> Get(int id)
         {
-            _logger.LogInformation(LoggingEvents.GetItem, "Getting case form {Id}", id);
-
-            var caseForm = await _context.CaseForms.FindAsync(id);
+            var caseForm = await _caseFormService.GetCaseFormById(id);
             if (caseForm == null)
             {
-                _logger.LogWarning(LoggingEvents.GetItemNotFound, "Case form {Id} NOT FOUND", id);
                 return NotFound();
             }
 
-            return caseForm;
+            return Ok(caseForm);
         }
+
+        // TODO: Add a GetByUsername() method
 
         // POST: api/CaseForms
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for
@@ -66,6 +68,17 @@ namespace EZSubmitApp.Controllers
 
             return CreatedAtAction("Get", new { id = caseForm.Id }, caseForm);
         }
+        //[HttpPost]
+        //public async Task<ActionResult<CaseForm>> Post(CaseFormForCreationDto caseFormForCreation)
+        //{
+        //    if (caseFormForCreation == null)
+        //    {
+        //        return BadRequest();
+        //    }
+
+        //    var caseFormToReturn = await _caseFormService.CreateCaseForm(caseFormForCreation);
+        //    return CreatedAtAction("Get", new { id = caseFormToReturn.Id }, caseFormToReturn);
+        //}
 
         // PUT: api/CaseForms/5
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for

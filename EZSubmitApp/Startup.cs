@@ -21,6 +21,9 @@ using EZSubmitApp.Core.JsonConverters;
 using System.Text.Json;
 using EZSubmitApp.Core.Constants;
 using System.Collections.Generic;
+using AutoMapper;
+using EZSubmitApp.Core.Interfaces;
+using EZSubmitApp.Core.Services;
 
 namespace EZSubmitApp
 {
@@ -52,6 +55,9 @@ namespace EZSubmitApp
             });
             services.AddScoped<IDocxConverter, DocxConverter>();
 
+            // TODO: Move this to Core project
+            services.AddScoped<ICaseFormService, CaseFormService>();
+
             services.AddControllersWithViews()
                 .AddJsonOptions(options => {
                     options.JsonSerializerOptions.PropertyNameCaseInsensitive = true;
@@ -75,6 +81,8 @@ namespace EZSubmitApp
             {
                 configuration.RootPath = "ClientApp/dist";
             });
+
+            services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
