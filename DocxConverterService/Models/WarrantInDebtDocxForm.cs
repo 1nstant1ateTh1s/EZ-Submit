@@ -13,7 +13,7 @@ namespace DocxConverterService.Models
         public string FilePath { get; }
         public WarrantInDebtDocxFormFields Fields { get; set; }
 
-        public WarrantInDebtDocxForm(DocxConverterConfiguration docxConverterConfig)
+        public WarrantInDebtDocxForm(DocxConverterOptions docxConverterConfig)
         {
             TemplateDocument = docxConverterConfig.TemplateLocation + docxConverterConfig.WarrantInDebtTemplateDocument;
             FilePath = docxConverterConfig.OutputDirectory;

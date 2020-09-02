@@ -9,9 +9,9 @@ namespace DocxConverterService
 {
     public class DocxConverter : IDocxConverter
     {
-        private readonly IOptions<DocxConverterConfiguration> _docxConverterConfig;
+        private readonly IOptions<DocxConverterOptions> _docxConverterConfig;
 
-        public DocxConverter(IOptions<DocxConverterConfiguration> docxConverterConfig)
+        public DocxConverter(IOptions<DocxConverterOptions> docxConverterConfig)
         {
             _docxConverterConfig = docxConverterConfig;
         }

@@ -14,6 +14,7 @@ using EZSubmitApp.Core.Entities;
 using EZSubmitApp.Infrastructure.Extensions;
 using System;
 using System.IO;
+using DocxConverterService.Extensions;
 using DocxConverterService.Interfaces;
 using DocxConverterService;
 using EZSubmitApp.Core.Configuration;
@@ -46,14 +47,36 @@ namespace EZSubmitApp
             services.AddDbLayer(AspnetRunSettings.ConnectionStrings.DefaultConnection);
 
             // Configure DocxConverter service
-            services.Configure<DocxConverterConfiguration>(Configuration.GetSection("DocxConverterConfiguration"));
-            services.PostConfigure<DocxConverterConfiguration>(o =>
+            var docxConverterConfigSection = Configuration.GetSection("DocxConverterOptions");
+            var test2 = Configuration.Get<DocxConverterOptions>();
+            // TODO: Test option #1 - applying WebHostEnvironment.ContentRootPath to TemplateLocation in DocxConverterExtensions.cs
+            services.AddDocxConverter(options => 
             {
-                o.TemplateLocation = Path.Combine(
-                    WebHostEnvironment.ContentRootPath,
-                    String.Format(Configuration.GetValue<string>("DocxConverterConfiguration:TemplateLocation")));
+                options = Configuration.Get<DocxConverterOptions>();
+            }, 
+            WebHostEnvironment.ContentRootPath);
+
+            // TODO: Test option #2 - applying WebHostEnvironment.ContentRootPath to TemplateLocation in Startup.cs
+            services.AddDocxConverter(options =>
+            {
+                options.TemplateLocation = Path.Combine(
+                    WebHostEnvironment.ContentRootPath, 
+                    test2.TemplateLocation);
+                options.WarrantInDebtTemplateDocument = test2.WarrantInDebtTemplateDocument;
+                options.SummonsForUnlawfulDetainerTemplateDocument = test2.SummonsForUnlawfulDetainerTemplateDocument;
+                options.OutputDirectory = test2.OutputDirectory;
+                options.CourtName = test2.CourtName;
+                options.CourtAddress = test2.CourtAddress;
             });
-            services.AddScoped<IDocxConverter, DocxConverter>();
+
+            //services.Configure<DocxConverterOptions>(Configuration.GetSection("DocxConverterConfiguration"));
+            //services.PostConfigure<DocxConverterOptions>(o =>
+            //{
+            //    o.TemplateLocation = Path.Combine(
+            //        WebHostEnvironment.ContentRootPath,
+            //        String.Format(Configuration.GetValue<string>("DocxConverterConfiguration:TemplateLocation")));
+            //});
+            //services.AddScoped<IDocxConverter, DocxConverter>();
 
             // TODO: Move this to Core project
             services.AddScoped<ICaseFormService, CaseFormService>();

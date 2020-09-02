@@ -1,7 +1,7 @@
 ﻿
 namespace DocxConverterService
 {
-    public class DocxConverterConfiguration
+    public class DocxConverterOptions
     {
         //public const string WarrantInDebtConfiguration = "WarrantInDebtConfiguration";
         //public const string SummonsForUnlawfulDetainerConfiguration = "SummonsForUnlawfulDetainerConfiguration";

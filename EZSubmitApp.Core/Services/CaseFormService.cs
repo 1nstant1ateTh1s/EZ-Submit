@@ -4,7 +4,6 @@ using EZSubmitApp.Core.DTOs;
 using EZSubmitApp.Core.Entities;
 using EZSubmitApp.Core.Interfaces;
 using EZSubmitApp.Core.IRepositories;
-using EZSubmitApp.Core.Mapper;
 using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
@@ -36,7 +35,6 @@ namespace EZSubmitApp.Core.Services
 
             var caseFormList = await _caseFormRepo.GetCaseFormsAsync();
             var caseFormDtos = _mapper.Map<IEnumerable<CaseFormDto>>(caseFormList);
-            //var caseFormDtos = ObjectMapper.Mapper.Map<IEnumerable<CaseFormDto>>(caseFormList);
 
             return caseFormDtos;
         }
