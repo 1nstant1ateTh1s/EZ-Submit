@@ -25,6 +25,7 @@ using System.Collections.Generic;
 using AutoMapper;
 using EZSubmitApp.Core.Interfaces;
 using EZSubmitApp.Core.Services;
+using EZSubmitApp.Core.Extensions;
 
 namespace EZSubmitApp
 {
@@ -35,39 +36,50 @@ namespace EZSubmitApp
             Configuration = configuration;
             WebHostEnvironment = env;
             AspnetRunSettings = configuration.Get<AspnetRunSettings>();
+            ServiceRunSettings = configuration.Get<ServiceRunSettings>();
         }
 
         public IConfiguration Configuration { get; }
         public IWebHostEnvironment WebHostEnvironment { get; }
         public AspnetRunSettings AspnetRunSettings { get; }
+        public ServiceRunSettings ServiceRunSettings { get; }
 
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddDbLayer(AspnetRunSettings.ConnectionStrings.DefaultConnection);
+            //services.AddCoreLayer(ServiceRunSettings, WebHostEnvironment.ContentRootPath);
+            services.AddCoreLayer();
 
             // Configure DocxConverter service
-            var docxConverterConfigSection = Configuration.GetSection("DocxConverterOptions");
-            var test2 = Configuration.Get<DocxConverterOptions>();
-            // TODO: Test option #1 - applying WebHostEnvironment.ContentRootPath to TemplateLocation in DocxConverterExtensions.cs
-            services.AddDocxConverter(options => 
-            {
-                options = Configuration.Get<DocxConverterOptions>();
-            }, 
-            WebHostEnvironment.ContentRootPath);
-
-            // TODO: Test option #2 - applying WebHostEnvironment.ContentRootPath to TemplateLocation in Startup.cs
+            // TODO: Test option #2
             services.AddDocxConverter(options =>
             {
-                options.TemplateLocation = Path.Combine(
-                    WebHostEnvironment.ContentRootPath, 
-                    test2.TemplateLocation);
-                options.WarrantInDebtTemplateDocument = test2.WarrantInDebtTemplateDocument;
-                options.SummonsForUnlawfulDetainerTemplateDocument = test2.SummonsForUnlawfulDetainerTemplateDocument;
-                options.OutputDirectory = test2.OutputDirectory;
-                options.CourtName = test2.CourtName;
-                options.CourtAddress = test2.CourtAddress;
+                ServiceRunSettings.DocxConverterOptions.TemplateLocation = Path.Combine(
+                    WebHostEnvironment.ContentRootPath,
+                    ServiceRunSettings.DocxConverterOptions.TemplateLocation); // combine WebHostEnvironment.ContentRootPath with TemplateLocation 
+
+                options = ServiceRunSettings.DocxConverterOptions;
             });
+
+            //// TODO: Test option #2
+            //services.AddDocxConverter(options =>
+            //{
+            //    var docxConverterConfig = Configuration.Get<ServiceRunSettings>().DocxConverterOptions;
+            //    docxConverterConfig.TemplateLocation = Path.Combine(
+            //        WebHostEnvironment.ContentRootPath,
+            //        docxConverterConfig.TemplateLocation); // combine WebHostEnvironment.ContentRootPath with TemplateLocation 
+
+            //    options.TemplateLocation = docxConverterConfig.TemplateLocation;
+            //    //options.TemplateLocation = Path.Combine(
+            //    //    WebHostEnvironment.ContentRootPath,
+            //    //    docxConverterConfig.TemplateLocation); // combine WebHostEnvironment.ContentRootPath with TemplateLocation 
+            //    options.WarrantInDebtTemplateDocument = docxConverterConfig.WarrantInDebtTemplateDocument;
+            //    options.SummonsForUnlawfulDetainerTemplateDocument = docxConverterConfig.SummonsForUnlawfulDetainerTemplateDocument;
+            //    options.OutputDirectory = docxConverterConfig.OutputDirectory;
+            //    options.CourtName = docxConverterConfig.CourtName;
+            //    options.CourtAddress = docxConverterConfig.CourtAddress;
+            //});
 
             //services.Configure<DocxConverterOptions>(Configuration.GetSection("DocxConverterConfiguration"));
             //services.PostConfigure<DocxConverterOptions>(o =>
@@ -79,7 +91,7 @@ namespace EZSubmitApp
             //services.AddScoped<IDocxConverter, DocxConverter>();
 
             // TODO: Move this to Core project
-            services.AddScoped<ICaseFormService, CaseFormService>();
+            //services.AddScoped<ICaseFormService, CaseFormService>();
 
             services.AddControllersWithViews()
                 .AddJsonOptions(options => {
