@@ -3,7 +3,6 @@ namespace EZSubmitApp.Core.DTOs
 {
     public class ApplicationUserDto
     {
-        public string Id { get; set; }
         public bool IsActive { get; set; }
         public string FirstName { get; set; }
         public string LastName { get; set; }
