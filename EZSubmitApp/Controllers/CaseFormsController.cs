@@ -70,59 +70,62 @@ namespace EZSubmitApp.Controllers
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for
         // more details see https://aka.ms/RazorPagesCRUD.
         [HttpPut("{id}")]
-        public async Task<IActionResult> Put(int id, CaseForm caseForm)
+        public async Task<IActionResult> Put(int id, CaseFormForUpdateDto caseForm)
         {
-            if (id != caseForm.Id)
-            {
-                return BadRequest();
-            }
+            //if (id != caseForm.Id)
+            //{
+            //    return BadRequest();
+            //}
 
-            WarrantInDebtForm form = caseForm as WarrantInDebtForm;
-            //_context.Entry(form).State = EntityState.Modified;
+            //WarrantInDebtForm form = caseForm as WarrantInDebtForm;
+            ////_context.Entry(form).State = EntityState.Modified;
 
-            var caseFormFromRepo = await _context.CaseForms.FindAsync(id) as WarrantInDebtForm;
-            if (caseFormFromRepo == null)
-            {
-                _logger.LogWarning(LoggingEvents.UpdateItemNotFound, "UPDATE FAILED: Case form {Id} NOT FOUND", id);
-                return NotFound();
-            }
+            //var caseFormFromRepo = await _context.CaseForms.FindAsync(id) as WarrantInDebtForm;
+            //if (caseFormFromRepo == null)
+            //{
+            //    _logger.LogWarning(LoggingEvents.UpdateItemNotFound, "UPDATE FAILED: Case form {Id} NOT FOUND", id);
+            //    return NotFound();
+            //}
 
-            // TODO: Updates only work when I manually map properties after retrieving existing entity from DB.
-            // TODO: Will replace with DTO and AutoMapper mapping profile
-            caseFormFromRepo.CaseNumber = form.CaseNumber;
-            caseFormFromRepo.AttorneyFees = form.AttorneyFees;
-            caseFormFromRepo.FilingCost = form.FilingCost;
-            caseFormFromRepo.Interest = form.Interest;
-            caseFormFromRepo.SubmittedById = form.SubmittedById;
-            // ...
+            //// TODO: Updates only work when I manually map properties after retrieving existing entity from DB.
+            //// TODO: Will replace with DTO and AutoMapper mapping profile
+            //caseFormFromRepo.CaseNumber = form.CaseNumber;
+            //caseFormFromRepo.AttorneyFees = form.AttorneyFees;
+            //caseFormFromRepo.FilingCost = form.FilingCost;
+            //caseFormFromRepo.Interest = form.Interest;
+            //caseFormFromRepo.SubmittedById = form.SubmittedById;
+            //// ...
 
-            //caseForm.FormType = "WD";
-            //_context.Entry(caseForm).State = EntityState.Modified;
+            ////caseForm.FormType = "WD";
+            ////_context.Entry(caseForm).State = EntityState.Modified;
 
-            try
-            {
-                await _context.SaveChangesAsync();
-                _logger.LogInformation(LoggingEvents.UpdateItem, "Case form {Id} Updated", caseForm.Id);
-            }
-            catch (DbUpdateConcurrencyException)
-            {
-                if (!CaseFormExists(id))
-                {
-                    _logger.LogWarning(LoggingEvents.UpdateItemNotFound, "UPDATE FAILED: Case form {Id} no longer exists", caseForm.Id);
-                    return NotFound();
-                }
-                else
-                {
-                    throw;
-                }
-            }
+            //try
+            //{
+            //    await _context.SaveChangesAsync();
+            //    _logger.LogInformation(LoggingEvents.UpdateItem, "Case form {Id} Updated", caseForm.Id);
+            //}
+            //catch (DbUpdateConcurrencyException)
+            //{
+            //    if (!CaseFormExists(id))
+            //    {
+            //        _logger.LogWarning(LoggingEvents.UpdateItemNotFound, "UPDATE FAILED: Case form {Id} no longer exists", caseForm.Id);
+            //        return NotFound();
+            //    }
+            //    else
+            //    {
+            //        throw;
+            //    }
+            //}
             //catch (Exception ex)
             //{
             //    var e = ex;
             //    throw ex;
             //}
 
-            return NoContent();
+            //return NoContent();
+
+            await _caseFormService.UpdateCaseForm(id, caseForm);
+            return Ok();
         }
 
         // DELETE: api/CaseForms/5

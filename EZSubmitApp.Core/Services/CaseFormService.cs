@@ -4,6 +4,7 @@ using EZSubmitApp.Core.DTOs;
 using EZSubmitApp.Core.Entities;
 using EZSubmitApp.Core.Interfaces;
 using EZSubmitApp.Core.IRepositories;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
@@ -17,16 +18,19 @@ namespace EZSubmitApp.Core.Services
         private readonly ICaseFormRepository _caseFormRepo;
         private readonly IMapper _mapper;
         private readonly ILogger _logger;
+        private readonly UserManager<ApplicationUser> _userManager;
 
         public CaseFormService(
             ICaseFormRepository caseFormRepo,
             IMapper mapper,
-            ILogger<CaseFormService> logger)
+            ILogger<CaseFormService> logger,
+            UserManager<ApplicationUser> userManager)
         {
             _caseFormRepo = caseFormRepo;
             // TODO: DI for IEmailService, & IDocxConverter
             _mapper = mapper;
             _logger = logger;
+            _userManager = userManager;
         }
 
         public async Task<IEnumerable<CaseFormDto>> GetCaseForms()
@@ -65,7 +69,10 @@ namespace EZSubmitApp.Core.Services
         {
             var newCaseForm = _mapper.Map<CaseForm>(caseFormForCreation);
 
+            // ! TEMP !
             // TODO: Make sure SubmittedBy gets set to currently logged in/authenticated user.
+            newCaseForm.SubmittedBy = await _userManager.FindByNameAsync("ambrown@cityofchesapeake.net"); // ! currently just for testing purposes
+            // ! TEMP !
 
             newCaseForm = await _caseFormRepo.AddAsync(newCaseForm);
             _logger.LogInformation(LoggingEvents.InsertItem, "Case form {Id} created", newCaseForm.Id);
@@ -77,9 +84,21 @@ namespace EZSubmitApp.Core.Services
             return caseFormDto;
         }
 
-        public Task UpdateCaseForm(CaseFormDto caseFormDto)
+        public async Task UpdateCaseForm(int id, CaseFormForUpdateDto caseFormForUpdate)
         {
-            throw new NotImplementedException();
+            var existingCaseForm = await _caseFormRepo.GetByIdAsync(id);
+            if (existingCaseForm == null)
+            {
+                // TODO: Global exception handling can take care of the call to logger... I can remove these lines to logger once global exception handling is added in
+                _logger.LogWarning(LoggingEvents.UpdateItemNotFound, "Case form {Id} NOT FOUND", id);
+                throw new ApplicationException($"Case form with id {id} does not exist.");
+            }
+
+            // Map any updated field values in the dto back to the entity
+            _mapper.Map(caseFormForUpdate, existingCaseForm);
+
+            await _caseFormRepo.UpdateAsync(existingCaseForm);
+            _logger.LogInformation(LoggingEvents.UpdateItem, "Case form {Id} Updated", existingCaseForm.Id);
         }
 
         public async Task DeleteCaseFormById(int id)

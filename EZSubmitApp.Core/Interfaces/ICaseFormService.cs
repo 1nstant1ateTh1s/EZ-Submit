@@ -10,7 +10,7 @@ namespace EZSubmitApp.Core.Interfaces
         Task<IEnumerable<CaseFormDto>> GetCaseForms();
         Task<IEnumerable<CaseFormDto>> GetCaseFormsByUser(string userName);
         Task<CaseFormDto> CreateCaseForm(CaseFormForCreationDto caseFormForCreation);
-        Task UpdateCaseForm(CaseFormDto caseFormDto);
+        Task UpdateCaseForm(int id, CaseFormForUpdateDto caseFormForUpdate);
         Task DeleteCaseFormById(int id);
     }
 }

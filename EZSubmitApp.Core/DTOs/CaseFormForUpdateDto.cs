@@ -1,0 +1,41 @@
+﻿using System;
+
+namespace EZSubmitApp.Core.DTOs
+{
+    public class CaseFormForUpdateDto
+    {
+        public string FormType { get; set; } // TODO: figure out if I actually need this FormType property specified here ...
+
+        public string HearingDate { get; set; }
+        public string HearingTime { get; set; }
+
+        // Plaintiff
+        public string PlaintiffType { get; set; }
+        public string PlaintiffName { get; set; }
+        public string PlaintiffTaDbaType { get; set; }
+        public string PlaintiffTaDbaName { get; set; }
+        public string PlaintiffAddress1 { get; set; }
+        public string PlaintiffAddress2 { get; set; }
+        public string PlaintiffPhone { get; set; }
+
+        // Defendant #1
+        public string DefendantType { get; set; }
+        public string DefendantName { get; set; }
+        public string DefendantTaDbaName { get; set; }
+        public string DefendantAddress1 { get; set; }
+        public string DefendantAddress2 { get; set; }
+
+        // Defendant #2
+        public string Defendant2Type { get; set; }
+        public string Defendant2Name { get; set; }
+        public string Defendant2TaDbaName { get; set; }
+        public string Defendant2Address1 { get; set; }
+        public string Defendant2Address2 { get; set; }
+
+        public DateTime GetHearingDateTime()
+        {
+            // TODO: Need so exception handling in here in case strings are in a format that can't be parsed into DateTime
+            return DateTime.Parse(HearingDate + " " + HearingTime);
+        }
+    }
+}
