@@ -101,6 +101,7 @@ namespace EZSubmitApp
                     options.JsonSerializerOptions.Converters.Add(new CaseFormJsonConverter());
                     options.JsonSerializerOptions.Converters.Add(new CaseFormDtoJsonConverter());
                     options.JsonSerializerOptions.Converters.Add(new CaseFormForCreationDtoJsonConverter());
+                    options.JsonSerializerOptions.Converters.Add(new CaseFormForUpdateDtoJsonConverter());
                     options.JsonSerializerOptions.Converters.Add(new DecimalJsonConverter());
                     options.JsonSerializerOptions.Converters.Add(new NullableDateTimeJsonConverter());
                 });

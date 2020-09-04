@@ -46,4 +46,18 @@ namespace EZSubmitApp.Core.JsonConverters
                             { CaseFormTypes.SUMMONS_FOR_UNLAWFUL_DETAINER, typeof(SummonsForUnlawfulDetainerFormForCreationDto) }
                         };
     }
+
+    /// <summary>
+    /// Polymorphic Json converter for CaseForm Update DTO classes.
+    /// </summary>
+    public class CaseFormForUpdateDtoJsonConverter : DerivedTypeJsonConverter<CaseFormForUpdateDto>
+    {
+        protected override string TypePropertyName => CaseFormConstants.TYPE_JSON_PROPERTY_NAME;
+
+        protected override Dictionary<string, Type> TypeMap => new Dictionary<string, Type>(StringComparer.OrdinalIgnoreCase)
+                        {
+                            { CaseFormTypes.WARRANT_IN_DEBT, typeof(WarrantInDebtFormForUpdateDto) },
+                            { CaseFormTypes.SUMMONS_FOR_UNLAWFUL_DETAINER, typeof(SummonsForUnlawfulDetainerFormForUpdateDto) }
+                        };
+    }
 }
