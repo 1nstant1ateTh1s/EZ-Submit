@@ -34,6 +34,7 @@ namespace EZSubmitApp.Core.DTOs
 
         public DateTime GetHearingDateTime()
         {
+            // TODO: Need so exception handling in here in case strings are in a format that can't be parsed into DateTime
             return DateTime.Parse(HearingDate + " " + HearingTime);
         }
     }

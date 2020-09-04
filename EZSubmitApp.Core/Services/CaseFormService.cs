@@ -64,7 +64,9 @@ namespace EZSubmitApp.Core.Services
         public async Task<CaseFormDto> CreateCaseForm(CaseFormForCreationDto caseFormForCreation)
         {
             var newCaseForm = _mapper.Map<CaseForm>(caseFormForCreation);
+
             // TODO: Make sure SubmittedBy gets set to currently logged in/authenticated user.
+
             newCaseForm = await _caseFormRepo.AddAsync(newCaseForm);
             _logger.LogInformation(LoggingEvents.InsertItem, "Case form {Id} created", newCaseForm.Id);
 
@@ -80,9 +82,18 @@ namespace EZSubmitApp.Core.Services
             throw new NotImplementedException();
         }
 
-        public Task DeleteCaseFormById(int id)
+        public async Task DeleteCaseFormById(int id)
         {
-            throw new NotImplementedException();
+            var existingCaseForm = await _caseFormRepo.GetByIdAsync(id);
+            if (existingCaseForm == null)
+            {
+                // TODO: Global exception handling can take care of the call to logger... I can remove these lines to logger once global exception handling is added in
+                _logger.LogWarning(LoggingEvents.DeleteItemNotFound, "Case form {Id} NOT FOUND", id);
+                throw new ApplicationException($"Case form with id {id} does not exist.");
+            }
+
+            await _caseFormRepo.DeleteAsync(existingCaseForm);
+            _logger.LogInformation(LoggingEvents.DeleteItem, "Case form {Id} deleted", id);
         }
 
     }
