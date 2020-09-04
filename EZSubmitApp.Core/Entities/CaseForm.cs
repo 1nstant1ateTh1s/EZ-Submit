@@ -9,7 +9,6 @@ using System.Text.Json.Serialization;
 namespace EZSubmitApp.Core.Entities
 {
     //[JsonConverter(typeof(CaseFormConverterWithTypeDiscriminator<CaseForm>))]
-    //[JsonConverter(typeof(AsRuntimeTypeConverter<CaseForm>))]
     //public abstract class CaseForm : IntBaseEntity, ICaseForm
     public abstract class CaseForm : IntBaseEntity
     {
