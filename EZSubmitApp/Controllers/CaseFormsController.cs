@@ -1,5 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Threading.Tasks;
+using DocxConverterService.Interfaces;
+using DocxConverterService.Models;
 using EZSubmitApp.Core.DTOs;
 using EZSubmitApp.Core.Entities;
 using EZSubmitApp.Core.Interfaces;
@@ -14,11 +16,14 @@ namespace EZSubmitApp.Controllers
     public class CaseFormsController : ControllerBase
     {
         private readonly ICaseFormService _caseFormService;
+        private readonly IDocxConverter _docxConverterService;
 
         public CaseFormsController(
-            ICaseFormService caseFormService)
+            ICaseFormService caseFormService,
+            IDocxConverter docxConverterService)
         {
             _caseFormService = caseFormService;
+            _docxConverterService = docxConverterService;
         }
 
         // GET: api/CaseForms
@@ -44,6 +49,23 @@ namespace EZSubmitApp.Controllers
         }
 
         // TODO: Add a GetByUsername() method
+
+        [HttpGet("{id}/docx")]
+        public async Task<IActionResult> GetDocx(int id)
+        {
+            IGeneratable generatable = new WarrantInDebtDocxForm();
+
+            // TODO: Now, I need to look up the Case Form entity for the given id, and 
+            //          map it's values into the model representing the Docx form fields
+
+            var bytes = await _docxConverterService.Convert(generatable);
+            string mimeType = "application/vnd.openxmlformats-officedocument.wordprocessingml.document";
+            //string mimeType = "application/vnd.ms-word";
+            return new FileContentResult(bytes, mimeType)
+            {
+                FileDownloadName = string.Format("{0}_{1}.docx", "Generated_Warrant_In_Debt", id)
+            };
+        }
 
         // POST: api/CaseForms
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for

@@ -3,9 +3,7 @@ namespace DocxConverterService.Interfaces
 {
     public interface IGeneratable
     {
-        string TemplateDocument { get; }
-        string OutputDocument { get; }
+        string TemplateFile { get; }
         string FileName { get; }
-        string FilePath { get; }
     }
 }

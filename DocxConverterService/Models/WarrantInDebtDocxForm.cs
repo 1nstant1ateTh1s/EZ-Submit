@@ -1,5 +1,6 @@
 ﻿using DocxConverterService.Interfaces;
 using System.IO;
+using System.Reflection;
 using System.Xml.Serialization;
 
 namespace DocxConverterService.Models
@@ -7,24 +8,32 @@ namespace DocxConverterService.Models
     [XmlRoot("WarrantInDebtMsWordForm", Namespace = "http://schemas.cityofchesapeake.net/ezsubmit/warrant-in-debt-properties")]
     public class WarrantInDebtDocxForm : IGeneratable
     {
-        public string TemplateDocument { get; }
-        public string OutputDocument { get; }
-        public string FileName { get; }
-        public string FilePath { get; }
+        private const string TEMPLATE_LOCATION = @"\Templates\Warrant_In_Debt-Template.docx";
+        private const string BASE_FILE_NAME = "Generated_Warrant_In_Debt";
+        private const string BASE_FILE_TYPE = "docx";
+
+        public string TemplateFile { get; }
+
+        public string FileName { 
+            get
+            {
+                return string.Format("{0}_{1}.{2}",
+                    BASE_FILE_NAME, 
+                    (!string.IsNullOrWhiteSpace(Fields.CaseNumber) ? Fields.CaseNumber : "NoCaseNumber"),
+                    BASE_FILE_TYPE);
+            }
+        }
+
         public WarrantInDebtDocxFormFields Fields { get; set; }
 
-        public WarrantInDebtDocxForm(DocxConverterOptions docxConverterConfig)
+        public WarrantInDebtDocxForm()
         {
-            TemplateDocument = docxConverterConfig.TemplateLocation + docxConverterConfig.WarrantInDebtTemplateDocument;
-            FilePath = docxConverterConfig.OutputDirectory;
-            FileName = string.Format("{0}_{1}.docx", "Generated_Warrant_In_Debt", "TODO"); // TODO: Incorporate case number to make the FileName unique / less likely to encounter a concurrency conflict
-            OutputDocument = Path.Combine(
-                FilePath, 
-                string.Format($"{FileName}"));
+            // Get the path to the build directory at runtime in order to have full path to Template file
+            var buildDir = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
+            TemplateFile = buildDir + TEMPLATE_LOCATION;
 
             Fields = new WarrantInDebtDocxFormFields();
         }
-
 
     }
 }

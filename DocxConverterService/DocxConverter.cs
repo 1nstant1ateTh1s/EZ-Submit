@@ -18,15 +18,23 @@ namespace DocxConverterService
 
         public async Task<byte[]> Convert<T>(T model) where T : IGeneratable
         {
-            string templateDocument = model.TemplateDocument;
-            string outputDocument = model.OutputDocument;
+            string templateSource = model.TemplateFile;
+            string outputPath = _docxConverterConfig.Value.OutputDirectory;
+            string outputFile = Path.Combine(
+               outputPath,
+               model.FileName);
 
             #region Option #1 - File.Copy()
-            // Make a copy of templateDocument then populate with new data (overwrite any existing file)
-            File.Copy(templateDocument, outputDocument, true);
+
+            // Create a new output folder.
+            // If directory already exists, this method does nothing
+            Directory.CreateDirectory(outputPath);
+
+            // Make a copy of templateSource then populate with new data (overwrite any existing file)
+            File.Copy(templateSource, outputFile, true);
 
             using (WordprocessingDocument wordDoc =
-                WordprocessingDocument.Open(outputDocument, true))
+                WordprocessingDocument.Open(outputFile, true))
             {
                 // Get the main part of the document which contains CustomXMLParts
                 MainDocumentPart mainPart = wordDoc.MainDocumentPart;
@@ -43,9 +51,10 @@ namespace DocxConverterService
                 }
             }
 
-            byte[] byteArray = File.ReadAllBytes(outputDocument);
+            byte[] byteArray = File.ReadAllBytes(outputFile);
 
-            // TODO: File.Delete(outputDocument);
+            // Delete the file on disk
+            File.Delete(outputFile);
 
             return byteArray;
             #endregion
