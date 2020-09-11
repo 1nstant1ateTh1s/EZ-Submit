@@ -53,10 +53,27 @@ namespace EZSubmitApp.Controllers
         [HttpGet("{id}/docx")]
         public async Task<IActionResult> GetDocx(int id)
         {
-            IGeneratable generatable = new WarrantInDebtDocxForm();
+            var caseForm = await _caseFormService.GetCaseFormById(id);
+            if (caseForm == null)
+            {
+                return NotFound();
+            }
+
+            IGeneratable generatable = null;
 
             // TODO: Now, I need to look up the Case Form entity for the given id, and 
             //          map it's values into the model representing the Docx form fields
+            /* TEMP */
+            if (caseForm is WarrantInDebtForm)
+            {
+                generatable = new WarrantInDebtDocxForm();
+                generatable.Fields.
+            }
+            else if (caseForm is SummonsForUnlawfulDetainerForm)
+            {
+                // todo: instantiate new SummonsForUnlawfulDetainerDocxForm()
+            }
+            /* TEMP */
 
             var bytes = await _docxConverterService.Convert(generatable);
             string mimeType = "application/vnd.openxmlformats-officedocument.wordprocessingml.document";

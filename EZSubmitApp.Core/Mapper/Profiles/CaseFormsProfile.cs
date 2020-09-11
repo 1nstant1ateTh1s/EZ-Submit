@@ -34,6 +34,10 @@ namespace EZSubmitApp.Core.Mapper.Profiles
             CreateMap<DTOs.SummonsForUnlawfulDetainerFormForUpdateDto, Entities.SummonsForUnlawfulDetainerForm>();
             #endregion
 
+            #region Docx conversion mappings
+            // TODO 
+            #endregion
+
             // TODO: Figure out what exactly this does 
             //CreateMap<string, DateTime>().ConvertUsing(new DateTimeTypeConverter());
         }

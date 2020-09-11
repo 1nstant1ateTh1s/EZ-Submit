@@ -44,7 +44,7 @@ namespace DocxConverterService
 
                 // Add new CustomXMLPart with data from new XML
                 CustomXmlPart myXmlPart = mainPart.AddCustomXmlPart(CustomXmlPartType.CustomXml);
-                using (var stream = SerializeObject(model))
+                using (var stream = SerializeXml(model))
                 {
                     myXmlPart.FeedData(stream);
                     wordDoc.Save();
@@ -63,7 +63,7 @@ namespace DocxConverterService
         /// <summary>
         /// Serialize the model into XML.
         /// </summary>
-        private MemoryStream SerializeObject<T>(T model)
+        private MemoryStream SerializeXml<T>(T model)
         {
             XmlSerializer serializer = new XmlSerializer(model.GetType());
             var stream = new MemoryStream();
