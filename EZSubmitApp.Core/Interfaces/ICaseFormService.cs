@@ -7,6 +7,7 @@ namespace EZSubmitApp.Core.Interfaces
     public interface ICaseFormService
     {
         Task<CaseFormDto> GetCaseFormById(int id);
+        Task<byte[]> GetCaseFormAsDocx(int id);
         Task<IEnumerable<CaseFormDto>> GetCaseForms();
         Task<IEnumerable<CaseFormDto>> GetCaseFormsByUser(string userName);
         Task<CaseFormDto> CreateCaseForm(CaseFormForCreationDto caseFormForCreation);

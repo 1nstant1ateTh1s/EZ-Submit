@@ -1,4 +1,6 @@
 ﻿
+using DocxConverterService.Interfaces;
+
 namespace DocxConverterService.Models
 {
     public class WarrantInDebtDocxFormFields
@@ -14,6 +16,8 @@ namespace DocxConverterService.Models
         public string FilingCost { get; set; } = " ";
         public string AttorneyFees { get; set; } = " ";
 
+        // TODO: ADD SPECIAL SETTER METHODS TO HANDLE LOGIC OF MAPPING AN INCOMING 'AccountType' VALUE TO EITHER
+        //          THE A1, A2, A3, or A4 OPTIONS ??
         //public AccountType AccountType { get; set; }
         /* Represent checkbox options for Account Type on paper form */
         public string A1 { get; set; } = " ";
@@ -23,6 +27,8 @@ namespace DocxConverterService.Models
 
         public string AccountTypeOther { get; set; } = " ";
 
+        // TODO: ADD SPECIAL SETTER METHODS TO HANDLE LOGIC OF MAPPING AN INCOMING 'HomesteadExemptionWaived' VALUE TO EITHER
+        //          THE B1, B2, or B3 OPTIONS ??
         /* Represent checkbox options for Homestead Exemption Waived? on paper form */
         //public HomesteadExemptionWaived HomesteadExemptionWaived { get; set; }
         public string B1 { get; set; } = " ";
@@ -31,6 +37,8 @@ namespace DocxConverterService.Models
 
         /* NOTE: These 2 fields are displayed directly underneath the "Homestead Exemption Waived?" section */
         public string Date2 { get; set; } = " ";
+        // TODO: ADD SPECIAL SETTER METHODS TO HANDLE LOGIC OF MAPPING AN INCOMING 'SignatureType' VALUE TO EITHER
+        //          THE C1, C2, or C3 OPTIONS ??
         /* Represent checkbox options for first occurence of Signature Type on paper form */
         //public SignatureType RB22 { get; set; }
         public string C1 { get; set; } = " ";
@@ -77,6 +85,8 @@ namespace DocxConverterService.Models
 
         /* These 2 fields are displayed directly underneath the "Certify" section at the end of page 2 */
         public string Date3 { get; set; } = " ";
+        // TODO: ADD SPECIAL SETTER METHODS TO HANDLE LOGIC OF MAPPING AN INCOMING 'SignatureType' VALUE TO EITHER
+        //          THE D1, D2, or D3 OPTIONS ??
         /* Represent checkbox options for second occurence of Signature Type on paper form */
         //public SignatureType RB01 { get; set; }
         public string D1 { get; set; } = " ";
