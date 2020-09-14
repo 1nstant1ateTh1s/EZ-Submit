@@ -1,4 +1,5 @@
-﻿using EZSubmitApp.Core.Constants;
+﻿using DocxConverterService.Interfaces;
+using EZSubmitApp.Core.Constants;
 using System;
 
 namespace EZSubmitApp.Core.Entities
@@ -20,6 +21,13 @@ namespace EZSubmitApp.Core.Entities
         public string AccountType { get; set; }
         public string AccountTypeOther { get; set; }
         public string HomesteadExemptionWaived { get; set; }
+        #endregion
+
+        #region Methods
+        public override IGeneratable ToDocxForm()
+        {
+            throw new NotImplementedException();
+        }
         #endregion
     }
 }

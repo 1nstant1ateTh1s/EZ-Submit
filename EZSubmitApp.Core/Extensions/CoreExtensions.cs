@@ -3,6 +3,7 @@ using EZSubmitApp.Core.Configuration;
 using EZSubmitApp.Core.Interfaces;
 using EZSubmitApp.Core.Services;
 using Microsoft.Extensions.DependencyInjection;
+using System;
 using System.IO;
 
 namespace EZSubmitApp.Core.Extensions
@@ -52,6 +53,17 @@ namespace EZSubmitApp.Core.Extensions
 
             // Chain pattern
             return services;
+        }
+
+        /// <summary>
+        /// Extension method to allow formatting when calling .ToString on nullable DateTime.
+        /// </summary>
+        /// <param name="dt"></param>
+        /// <param name="format"></param>
+        /// <returns></returns>
+        public static string ToString(this DateTime? dt, string format)
+        {
+            return (dt == null ? "" : ((DateTime)dt).ToString(format));
         }
     }
 }

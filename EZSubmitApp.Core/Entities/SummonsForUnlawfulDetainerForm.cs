@@ -1,4 +1,5 @@
-﻿using EZSubmitApp.Core.Constants;
+﻿using DocxConverterService.Interfaces;
+using EZSubmitApp.Core.Constants;
 using System;
 
 namespace EZSubmitApp.Core.Entities
@@ -25,6 +26,13 @@ namespace EZSubmitApp.Core.Entities
         public decimal AttorneyFees { get; set; }
         public bool IsAmountDueAtHearing { get; set; }
         public bool UseToTerminateTenancy { get; set; }
+        #endregion
+
+        #region Methods
+        public override IGeneratable ToDocxForm()
+        {
+            throw new NotImplementedException();
+        }
         #endregion
     }
 }

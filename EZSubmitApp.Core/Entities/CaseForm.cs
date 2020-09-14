@@ -1,4 +1,5 @@
-﻿using EZSubmitApp.Core.Constants;
+﻿using DocxConverterService.Interfaces;
+using EZSubmitApp.Core.Constants;
 using EZSubmitApp.Core.Entities.Base;
 using EZSubmitApp.Core.Interfaces;
 using EZSubmitApp.Core.JsonConverters;
@@ -54,6 +55,10 @@ namespace EZSubmitApp.Core.Entities
         public bool IsReadyToTransmit { get; set; }
 
         public DocxAttachment DocxAttachment { get; set; }
+        #endregion
+
+        #region Methods
+        public abstract IGeneratable ToDocxForm();
         #endregion
     }
 }

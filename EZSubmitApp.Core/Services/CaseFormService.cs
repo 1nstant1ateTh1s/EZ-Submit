@@ -66,85 +66,40 @@ namespace EZSubmitApp.Core.Services
             var caseForm = await _caseFormRepo.GetByIdAsync(id);
             if (caseForm == null) _logger.LogWarning(LoggingEvents.GetItemNotFound, "Case form {Id} NOT FOUND", id);
 
-            // TODO: Map CaseForm to IGeneratable
-            var caseFormFields = _mapper.Map<WarrantInDebtDocxFormFields>(caseForm);
             IGeneratable generatable = null;
-            // TODO: Now, I need to look up the Case Form entity for the given id, and 
-            //          map it's values into the model representing the Docx form fields
-            /* TEMP */
             if (caseForm is WarrantInDebtForm)
             {
-                WarrantInDebtForm wd = caseForm as WarrantInDebtForm;
-                generatable = new WarrantInDebtDocxForm()
+                generatable = _mapper.Map<WarrantInDebtDocxForm>(caseForm, opt =>
                 {
-                    Fields = caseFormFields
-
-                    //Fields = new WarrantInDebtDocxFormFields()
-                    //{
-                    //    Court = "CHESAPEAKE", // TODO: READ FROM CONFIGURATION
-                    //    CourtAddress = "307 Albemarle Drive, Suite 200B, Chesapeake, VA 23322, PH-757-382-3143 FAX-757-382-3113", // TODO: READ FROM CONFIGURATION
-                    //    HearingDate = wd.HearingDateTime.ToString("MM/dd/yyyy"),
-                    //    HearingTime = wd.HearingDateTime.ToString("hh:mm tt"),
-                    //    Principle = wd.Principle.ToString(),
-                    //    Interest = wd.Interest.ToString(),
-                    //    InterestStartDate = wd.UseDoj ? "DOJ" : wd.InterestStartDate?.ToString("MM/dd/yyyy"),
-                    //    FilingCost = wd.FilingCost.ToString(),
-                    //    AttorneyFees = wd.AttorneyFees.ToString(),
-                    //    A1 = (wd.AccountType == "Open Account" ? "X" : ""),
-                    //    A2 = (wd.AccountType == "Contract" ? "X" : ""),
-                    //    A3 = (wd.AccountType == "Note" ? "X" : ""),
-                    //    A4 = (wd.AccountType == "Other" ? "X" : ""),
-                    //    AccountTypeOther = wd.AccountTypeOther ?? "{accountTypeOther}",
-                    //    B1 = (wd.HomesteadExemptionWaived == "Yes" ? "X" : ""),
-                    //    B2 = (wd.HomesteadExemptionWaived == "No" ? "X" : ""),
-                    //    B3 = (wd.HomesteadExemptionWaived == "Cannot be determined" ? "X" : ""),
-                    //    Date2 = "", // NOTE: not currently represented on front-end form
-                    //    C1 = "", // NOTE: not currently represented on front-end form
-                    //    C2 = "", // NOTE: not currently represented on front-end form
-                    //    C3 = "", // NOTE: not currently represented on front-end form
-                    //    CaseNumber = wd.CaseNumber,
-                    //    PlaintiffName = wd.PlaintiffName,
-                    //    PlaintiffAddress1 = wd.PlaintiffTaDbaName,
-                    //    PlaintiffAddress2 = wd.PlaintiffAddress1,
-                    //    PlaintiffAddress3 = wd.PlaintiffAddress2,
-                    //    PlaintiffPhone = wd.PlaintiffPhone,
-                    //    DefendantName = wd.DefendantName,
-                    //    DefendantAddress1 = String.Format("{0} {1}", wd.DefendantAddress1, wd.DefendantAddress2),
-                    //    DefendantAddress2 = wd.Defendant2Name,
-                    //    DefendantAddress3 = String.Format("{0} {1}", wd.Defendant2Address1, wd.Defendant2Address2),
-                    //    // TODO: I do not have access to profile / attorney info at this point with a new '*ForCreationDto' obj
-                    //    AttyForPlaintiff1 = "",
-                    //    AttyForPlaintiff2 = "",
-                    //    AttyForDefendant1 = "",
-                    //    AttyForDefendant2 = "",
-                    //    // NOTE: None of these fields are currently represented on front-end form
-                    //    ReturnName1 = "",
-                    //    ReturnName1a = "",
-                    //    ReturnAddress1 = "",
-                    //    ReturnAddress1a = "",
-                    //    ReturnPhone1 = "",
-                    //    ReturnName2 = "",
-                    //    ReturnName2a = "",
-                    //    ReturnAddress2 = "",
-                    //    ReturnAddress2a = "",
-                    //    ReturnPhone2 = "",
-                    //    ReturnName3 = "",
-                    //    ReturnName3a = "",
-                    //    ReturnAddress3 = "",
-                    //    ReturnAddress3a = "",
-                    //    ReturnPhone3 = "",
-                    //    Date3 = "",
-                    //    D1 = "",
-                    //    D2 = "",
-                    //    D3 = ""
-                    //}
-                };
+                    opt.Items.Add("court", "CHESAPEAKE"); // TODO: Retrieve from configuration
+                    opt.Items.Add("courtAddress", "307 Albemarle Drive, Suite 200B, Chesapeake, VA 23322, PH-757-382-3143 FAX-757-382-3113"); // TODO: Retrieve from configuration
+                    // TODO: If above works, can pass in user profile /attorney info here
+                });
             }
             else if (caseForm is SummonsForUnlawfulDetainerForm)
             {
-                // todo: instantiate new SummonsForUnlawfulDetainerDocxForm()
+                // todo: map new SummonsForUnlawfulDetainerDocxForm()
             }
-            /* TEMP */
+
+            //// TODO: Map CaseForm to IGeneratable
+            //var caseFormFields = _mapper.Map<WarrantInDebtDocxFormFields>(caseForm);
+            //IGeneratable generatable = null;
+            //// TODO: Now, I need to look up the Case Form entity for the given id, and 
+            ////          map it's values into the model representing the Docx form fields
+            ///* TEMP */
+            //if (caseForm is WarrantInDebtForm)
+            //{
+            //    WarrantInDebtForm wd = caseForm as WarrantInDebtForm;
+            //    generatable = new WarrantInDebtDocxForm()
+            //    {
+            //        Fields = caseFormFields
+            //    };
+            //}
+            //else if (caseForm is SummonsForUnlawfulDetainerForm)
+            //{
+            //    // todo: instantiate new SummonsForUnlawfulDetainerDocxForm()
+            //}
+            ///* TEMP */
 
             return await _docxConverterService.Convert(generatable);
         }

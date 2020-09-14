@@ -5,7 +5,7 @@ using System.Text;
 
 namespace EZSubmitApp.Core.Mapper.Resolvers
 {
-    public class AccountTypeResolver : IMemberValueResolver<object, object, string, string>
+    public class HomesteadExemptionWaivedResolver : IMemberValueResolver<object, object, string, string>
     {
         public string Resolve(object source, object destination, string sourceMember, string destMember, ResolutionContext context)
         {
@@ -13,37 +13,29 @@ namespace EZSubmitApp.Core.Mapper.Resolvers
         }
     }
 
-    public class A1TypeResolver : IMemberValueResolver<object, object, string, string>
+    public class B1TypeResolver : IMemberValueResolver<object, object, string, string>
     {
         public string Resolve(object source, object destination, string sourceMember, string destMember, ResolutionContext context)
         {
             // TODO: Remove hardcoding
-            return sourceMember == "Open Account" ? "X" : "";
+            return sourceMember == "Yes" ? "X" : "";
         }
     }
 
-    public class A2TypeResolver : IMemberValueResolver<object, object, string, string>
+    public class B2TypeResolver : IMemberValueResolver<object, object, string, string>
     {
         public string Resolve(object source, object destination, string sourceMember, string destMember, ResolutionContext context)
         {
             // TODO: Remove hardcoding
-            return sourceMember == "Contract" ? "X" : "";
+            return sourceMember == "No" ? "X" : "";
         }
     }
-    public class A3TypeResolver : IMemberValueResolver<object, object, string, string>
+    public class B3TypeResolver : IMemberValueResolver<object, object, string, string>
     {
         public string Resolve(object source, object destination, string sourceMember, string destMember, ResolutionContext context)
         {
             // TODO: Remove hardcoding
-            return sourceMember == "Note" ? "X" : "";
-        }
-    }
-    public class A4TypeResolver : IMemberValueResolver<object, object, string, string>
-    {
-        public string Resolve(object source, object destination, string sourceMember, string destMember, ResolutionContext context)
-        {
-            // TODO: Remove hardcoding
-            return sourceMember == "Other" ? "X" : "";
+            return sourceMember == "Cannot be determined" ? "X" : "";
         }
     }
 }
