@@ -34,6 +34,13 @@
   </ItemGroup>
 
   <ItemGroup>
+    <None Remove="ClientApp\src\app\core\index.ts" />
+    <None Remove="ClientApp\src\app\core\models\index.ts" />
+    <None Remove="ClientApp\src\app\core\models\user.model.ts" />
+    <None Remove="ClientApp\src\app\core\models\wd.model.ts" />
+  </ItemGroup>
+
+  <ItemGroup>
     <ProjectReference Include="..\DocxConverterService\DocxConverterService.csproj" />
     <ProjectReference Include="..\EZSubmitApp.Core\EZSubmitApp.Core.csproj" />
     <ProjectReference Include="..\EZSubmitApp.Infrastructure\EZSubmitApp.Infrastructure.csproj" />
@@ -42,6 +49,13 @@
   <ItemGroup>
     <Folder Include="JsonConverters\" />
     <Folder Include="Models\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <TypeScriptCompile Include="ClientApp\src\app\core\index.ts" />
+    <TypeScriptCompile Include="ClientApp\src\app\core\models\index.ts" />
+    <TypeScriptCompile Include="ClientApp\src\app\core\models\user.model.ts" />
+    <TypeScriptCompile Include="ClientApp\src\app\core\models\wd.model.ts" />
   </ItemGroup>
 
   <Target Name="DebugEnsureNodeEnv" BeforeTargets="Build" Condition=" '$(Configuration)' == 'Debug' And !Exists('$(SpaRoot)node_modules') ">
