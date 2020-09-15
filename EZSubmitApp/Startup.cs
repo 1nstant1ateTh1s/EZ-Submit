@@ -48,8 +48,7 @@ namespace EZSubmitApp
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddDbLayer(AspnetRunSettings.ConnectionStrings.DefaultConnection);
-            //services.AddCoreLayer(ServiceRunSettings, WebHostEnvironment.ContentRootPath);
-            services.AddCoreLayer();
+            services.AddCoreLayer(Configuration);
 
             // Configure DocxConverter service
             services.AddDocxConverter(options =>

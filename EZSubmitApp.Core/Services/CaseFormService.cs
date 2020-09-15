@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using DocxConverterService.Interfaces;
 using DocxConverterService.Models;
+using EZSubmitApp.Core.Configuration;
 using EZSubmitApp.Core.Constants;
 using EZSubmitApp.Core.DTOs;
 using EZSubmitApp.Core.Entities;
@@ -8,6 +9,7 @@ using EZSubmitApp.Core.Interfaces;
 using EZSubmitApp.Core.IRepositories;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Options;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -22,13 +24,15 @@ namespace EZSubmitApp.Core.Services
         private readonly IMapper _mapper;
         private readonly ILogger _logger;
         private readonly UserManager<ApplicationUser> _userManager;
+        private readonly ServiceRunSettings _serviceRunSettings;
 
         public CaseFormService(
             IDocxConverter docxConverterService,
             ICaseFormRepository caseFormRepo,
             IMapper mapper,
             ILogger<CaseFormService> logger,
-            UserManager<ApplicationUser> userManager)
+            UserManager<ApplicationUser> userManager,
+            IOptions<ServiceRunSettings> serviceRunSettings)
         {
             _docxConverterService = docxConverterService;
             _caseFormRepo = caseFormRepo;
@@ -36,6 +40,7 @@ namespace EZSubmitApp.Core.Services
             _mapper = mapper;
             _logger = logger;
             _userManager = userManager;
+            _serviceRunSettings = serviceRunSettings.Value;
         }
 
         public async Task<IEnumerable<CaseFormDto>> GetCaseForms()
@@ -59,6 +64,9 @@ namespace EZSubmitApp.Core.Services
             return caseFormDto;
         }
 
+        /// <summary>
+        /// Gets a case form entity that has been converted to it's .docx form.
+        /// </summary>
         public async Task<byte[]> GetCaseFormAsDocx(int id)
         {
             _logger.LogInformation(LoggingEvents.GetItem, "Getting case form {Id}", id);
@@ -71,8 +79,8 @@ namespace EZSubmitApp.Core.Services
             {
                 generatable = _mapper.Map<WarrantInDebtDocxForm>(caseForm, opt =>
                 {
-                    opt.Items.Add("court", "CHESAPEAKE"); // TODO: Retrieve from configuration
-                    opt.Items.Add("courtAddress", "307 Albemarle Drive, Suite 200B, Chesapeake, VA 23322, PH-757-382-3143 FAX-757-382-3113"); // TODO: Retrieve from configuration
+                    opt.Items.Add("court", _serviceRunSettings.CaseFormSettings.CourtName);
+                    opt.Items.Add("courtAddress", _serviceRunSettings.CaseFormSettings.CourtAddress);
                     // TODO: If above works, can pass in user profile /attorney info here
                 });
             }
@@ -80,26 +88,6 @@ namespace EZSubmitApp.Core.Services
             {
                 // todo: map new SummonsForUnlawfulDetainerDocxForm()
             }
-
-            //// TODO: Map CaseForm to IGeneratable
-            //var caseFormFields = _mapper.Map<WarrantInDebtDocxFormFields>(caseForm);
-            //IGeneratable generatable = null;
-            //// TODO: Now, I need to look up the Case Form entity for the given id, and 
-            ////          map it's values into the model representing the Docx form fields
-            ///* TEMP */
-            //if (caseForm is WarrantInDebtForm)
-            //{
-            //    WarrantInDebtForm wd = caseForm as WarrantInDebtForm;
-            //    generatable = new WarrantInDebtDocxForm()
-            //    {
-            //        Fields = caseFormFields
-            //    };
-            //}
-            //else if (caseForm is SummonsForUnlawfulDetainerForm)
-            //{
-            //    // todo: instantiate new SummonsForUnlawfulDetainerDocxForm()
-            //}
-            ///* TEMP */
 
             return await _docxConverterService.Convert(generatable);
         }
