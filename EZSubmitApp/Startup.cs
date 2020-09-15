@@ -26,6 +26,7 @@ using AutoMapper;
 using EZSubmitApp.Core.Interfaces;
 using EZSubmitApp.Core.Services;
 using EZSubmitApp.Core.Extensions;
+using Microsoft.OpenApi.Models;
 
 namespace EZSubmitApp
 {
@@ -76,6 +77,17 @@ namespace EZSubmitApp
                 configuration.RootPath = "ClientApp/dist";
             });
 
+            // Register the Swagger generator - defining 1 or more Swagger documents
+            services.AddSwaggerGen(c =>
+            {
+                c.SwaggerDoc("v1", new OpenApiInfo 
+                { 
+                    Version = "v1",
+                    Title = "EZ Submit API",
+                    Description = "EZ Submit back-end API"
+                });
+            });
+
             services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
         }
 
@@ -113,6 +125,17 @@ namespace EZSubmitApp
             {
                 app.UseSpaStaticFiles();
             }
+
+            // Enable middleware to serve generated Swagger as a JSON endpoint.
+            app.UseSwagger();
+
+            // Enable middleware to serve swagger-ui (HTML, JS, CSS, etc.),
+            // specifying the Swagger JSON endpoint.
+            app.UseSwaggerUI(c =>
+            {
+                c.SwaggerEndpoint($"/swagger/v1/swagger.json", "EZ Submit API V1");
+                //c.RoutePrefix = string.Empty;
+            });
 
             app.UseRouting();
 
