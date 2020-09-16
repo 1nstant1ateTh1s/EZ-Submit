@@ -1,6 +1,8 @@
 import { User } from './user.model';
 
 export interface CaseForm {
+  id?: string; // id is present if editing or returning from DB
+
   formType: string;
   caseNumber: string;
   hearingDateTime: Date;

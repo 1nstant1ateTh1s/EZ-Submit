@@ -61,13 +61,15 @@ namespace EZSubmitApp.Core.JsonConverters
 
         public override void Write(Utf8JsonWriter writer, TBase value, JsonSerializerOptions options)
         {
-            // Create an ExpandoObject from the value to serialize so we can dynamically add a $type property to it
-            ExpandoObject expando = ToExpandoObject(value);
-            expando.TryAdd(TypePropertyName, TypeMap.FirstOrDefault(x => x.Value == value.GetType()).Key); // TODO: thoroughly test this method for retrieving TKey from dictionary based on TValue
-            //expando.TryAdd(TypePropertyName, TypeToName(value.GetType()));
+            //// Create an ExpandoObject from the value to serialize so we can dynamically add a $type property to it
+            //ExpandoObject expando = ToExpandoObject(value);
+            //expando.TryAdd(TypePropertyName, TypeMap.FirstOrDefault(x => x.Value == value.GetType()).Key); // TODO: thoroughly test this method for retrieving TKey from dictionary based on TValue
+            ////expando.TryAdd(TypePropertyName, TypeToName(value.GetType()));
 
-            // Serialize the expando
-            JsonSerializer.Serialize(writer, expando, options);
+            //// Serialize the expando
+            //JsonSerializer.Serialize(writer, expando, options);
+
+            JsonSerializer.Serialize(writer, value, value.GetType(), options);
         }
 
 

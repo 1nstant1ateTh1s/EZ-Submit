@@ -1,4 +1,7 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Inject } from '@angular/core';
+
+import { CaseForm } from '../../core';
+import { HttpClient } from '@angular/common/http';
 
 @Component({
   selector: 'app-case-form-list',
@@ -6,10 +9,19 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./case-form-list.component.css']
 })
 export class CaseFormListComponent implements OnInit {
+  public caseForms: CaseForm[];
 
-  constructor() { }
+  private displayDateFormat = 'MM/dd/yyyy, h:mm a';
+
+  constructor(
+    private http: HttpClient,
+    @Inject('BASE_URL') private baseUrl: string) { }
 
   ngOnInit(): void {
+    this.http.get<CaseForm[]>(this.baseUrl + 'api/CaseForms')
+      .subscribe(result => {
+        this.caseForms = result;
+      }, error => console.error(error));
   }
 
 }
