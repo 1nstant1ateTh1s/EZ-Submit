@@ -12,6 +12,7 @@ import { AuthorizeGuard } from 'src/api-authorization/authorize.guard';
 import { AuthorizeInterceptor } from 'src/api-authorization/authorize.interceptor';
 
 import { CoreModule } from './core/core.module';
+import { CaseFormsModule } from './case-forms/case-forms.module';
 
 @NgModule({
   declarations: [
@@ -27,7 +28,8 @@ import { CoreModule } from './core/core.module';
     ApiAuthorizationModule,
     RouterModule.forRoot([
       { path: '', component: HomeComponent, pathMatch: 'full' }
-    ])
+    ]),
+    CaseFormsModule
   ],
   providers: [
     { provide: HTTP_INTERCEPTORS, useClass: AuthorizeInterceptor, multi: true }

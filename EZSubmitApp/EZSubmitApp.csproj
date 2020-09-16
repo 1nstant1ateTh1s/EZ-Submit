@@ -47,6 +47,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Folder Include="ClientApp\src\app\case-forms\ud\" />
     <Folder Include="JsonConverters\" />
     <Folder Include="Models\" />
   </ItemGroup>
