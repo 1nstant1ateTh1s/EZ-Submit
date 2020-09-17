@@ -13,6 +13,7 @@ import { AuthorizeInterceptor } from 'src/api-authorization/authorize.intercepto
 
 import { CoreModule } from './core/core.module';
 import { CaseFormsModule } from './case-forms/case-forms.module';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
 @NgModule({
   declarations: [
@@ -29,7 +30,8 @@ import { CaseFormsModule } from './case-forms/case-forms.module';
     RouterModule.forRoot([
       { path: '', component: HomeComponent, pathMatch: 'full' }
     ]),
-    CaseFormsModule
+    CaseFormsModule,
+    BrowserAnimationsModule
   ],
   providers: [
     { provide: HTTP_INTERCEPTORS, useClass: AuthorizeInterceptor, multi: true }
