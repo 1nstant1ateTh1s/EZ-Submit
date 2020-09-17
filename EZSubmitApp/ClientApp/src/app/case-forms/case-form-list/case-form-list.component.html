@@ -4,7 +4,58 @@
 
 <p *ngIf="!caseForms"><em>Loading...</em></p>
 
-<table class="table table-striped" aria-labelledby="tableLabel" [hidden]="!caseForms">
+<table mat-table [dataSource]="caseForms" class="mat-elevation-z8" [hidden]="!caseForms">
+  <!--- Note that these columns can be defined in any order.
+       The actual rendered columns are set as a property on the row definition" -->
+  <!-- ID column -->
+  <ng-container matColumnDef="id">
+    <th mat-header-cell *matHeaderCellDef>ID</th>
+    <td mat-cell *matCellDef="let case"> {{ case.id }} </td>
+  </ng-container>
+
+  <!-- Form Type column -->
+  <ng-container matColumnDef="formType">
+    <th mat-header-cell *matHeaderCellDef>Form Type</th>
+    <td mat-cell *matCellDef="let case"> {{case.formType}} </td>
+  </ng-container>
+
+  <!-- Case Number column -->
+  <ng-container matColumnDef="caseNumber">
+    <th mat-header-cell *matHeaderCellDef mat-sort-header> Case Number </th>
+    <td mat-cell *matCellDef="let case"> {{case.caseNumber}} </td>
+  </ng-container>
+
+  <!-- Hearing Date/Time column -->
+  <ng-container matColumnDef="hearingDateTime">
+    <th mat-header-cell *matHeaderCellDef mat-sort-header> Hearing Date </th>
+    <td mat-cell *matCellDef="let case"> {{case.hearingDateTime | date: displayDateFormat}} </td>
+  </ng-container>
+
+  <!-- Plaintiff Name column -->
+  <ng-container matColumnDef="plaintiffName">
+    <th mat-header-cell *matHeaderCellDef mat-sort-header> Plaintiff Name </th>
+    <td mat-cell *matCellDef="let case"> {{case.plaintiffName}} </td>
+  </ng-container>
+
+  <!-- Submitted By column -->
+  <ng-container matColumnDef="submittedBy">
+    <th mat-header-cell *matHeaderCellDef mat-sort-header> Submitted By </th>
+    <td mat-cell *matCellDef="let case"> {{case.submittedBy?.firstName}} {{case.submittedBy?.lastName}} </td>
+  </ng-container>
+
+  <!-- Submission Date/Time column -->
+  <ng-container matColumnDef="submissionDateTime">
+    <th mat-header-cell *matHeaderCellDef mat-sort-header> Submission Date </th>
+    <td mat-cell *matCellDef="let case"> {{case.submissionDateTime | date: displayDateFormat}} </td>
+  </ng-container>
+
+  <!-- The table will render one header row and one data row per data object -->
+  <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+  <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+
+</table>
+
+<!--<table class="table table-striped" aria-labelledby="tableLabel" [hidden]="!caseForms">
   <thead>
     <tr>
       <th>ID</th>
@@ -27,4 +78,4 @@
       <td>{{ caseForm.submissionDateTime | date: displayDateFormat }}</td>
     </tr>
   </tbody>
-</table>
+</table>-->

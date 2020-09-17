@@ -9,6 +9,7 @@ import { HttpClient } from '@angular/common/http';
   styleUrls: ['./case-form-list.component.css']
 })
 export class CaseFormListComponent implements OnInit {
+  public displayedColumns: string[] = ['id', 'formType', 'caseNumber', 'hearingDateTime', 'plaintiffName', 'submittedBy', 'submissionDateTime'];
   public caseForms: CaseForm[];
 
   private displayDateFormat = 'MM/dd/yyyy, h:mm a';
