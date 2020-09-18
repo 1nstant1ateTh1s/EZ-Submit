@@ -3,6 +3,7 @@ using System.Threading.Tasks;
 using EZSubmitApp.Core.DTOs;
 using EZSubmitApp.Core.Entities;
 using EZSubmitApp.Core.Interfaces;
+using EZSubmitApp.Requests;
 using Microsoft.AspNetCore.Mvc;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
@@ -22,10 +23,13 @@ namespace EZSubmitApp.Controllers
         }
 
         // GET: api/CaseForms
+        // GET: api/CaseForms/?pageIndex=0&pageSize=10
         [HttpGet]
         [HttpHead]
-        public async Task<ActionResult<IEnumerable<CaseForm>>> Get()
+        public async Task<ActionResult<IEnumerable<CaseForm>>> Get([FromQuery] PageSearchRequest request)
         {
+            var pagingArgs = request;
+
             var caseForms = await _caseFormService.GetCaseForms();
             return Ok(caseForms);
         }
