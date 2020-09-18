@@ -55,6 +55,12 @@
 
 </table>
 
+<!-- Pagination directive -->
+<mat-paginator [hidden]="!caseForms"
+               [pageSize]="6"
+               [pageSizeOptions]="[2, 4, 6, 10, 20]"
+               showFirstLastButtons></mat-paginator>
+
 <!--<table class="table table-striped" aria-labelledby="tableLabel" [hidden]="!caseForms">
   <thead>
     <tr>
