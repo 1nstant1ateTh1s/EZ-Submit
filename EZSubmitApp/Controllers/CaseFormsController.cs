@@ -3,6 +3,7 @@ using System.Threading.Tasks;
 using EZSubmitApp.Core.DTOs;
 using EZSubmitApp.Core.Entities;
 using EZSubmitApp.Core.Interfaces;
+using EZSubmitApp.Core.Paging;
 using EZSubmitApp.Requests;
 using Microsoft.AspNetCore.Mvc;
 
@@ -26,11 +27,12 @@ namespace EZSubmitApp.Controllers
         // GET: api/CaseForms/?pageIndex=0&pageSize=10
         [HttpGet]
         [HttpHead]
-        public async Task<ActionResult<IEnumerable<CaseForm>>> Get([FromQuery] PageSearchRequest request)
+        //public async Task<ActionResult<IEnumerable<CaseForm>>> Get([FromQuery] PageSearchRequest request)
+        public async Task<ActionResult<IEnumerable<CaseForm>>> Get([FromQuery] PageSearchArgs request)
         {
             var pagingArgs = request;
 
-            var caseForms = await _caseFormService.GetCaseForms();
+            var caseForms = await _caseFormService.GetCaseForms(pagingArgs);
             return Ok(caseForms);
         }
 

@@ -11,6 +11,13 @@ namespace EZSubmitApp.Core.Specifications
             AddInclude(c => c.SubmittedBy);
         }
 
+        public CaseFormWithSubmittedBySpecification(int skip, int take)
+            :base(null)
+        {
+            AddInclude(c => c.SubmittedBy);
+            ApplyPaging(skip, take);
+        }
+
         public CaseFormWithSubmittedBySpecification(int caseFormId)
             : base(c => c.Id == caseFormId)
         {

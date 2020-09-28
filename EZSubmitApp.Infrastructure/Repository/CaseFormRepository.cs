@@ -1,5 +1,6 @@
 ﻿using EZSubmitApp.Core.Entities;
 using EZSubmitApp.Core.IRepositories;
+using EZSubmitApp.Core.Paging;
 using EZSubmitApp.Core.Specifications;
 using EZSubmitApp.Infrastructure.Data;
 using EZSubmitApp.Infrastructure.Repository.Base;
@@ -24,6 +25,12 @@ namespace EZSubmitApp.Infrastructure.Repository
         public async Task<IEnumerable<CaseForm>> GetCaseFormsAsync()
         {
             var allCaseFormsSpec = new CaseFormWithSubmittedBySpecification();
+            return await ListAsync(allCaseFormsSpec);
+        }
+
+        public async Task<IEnumerable<CaseForm>> GetCaseFormsAsync(PageSearchArgs args)
+        {
+            var allCaseFormsSpec = new CaseFormWithSubmittedBySpecification(args.PageIndex * args.PageSize, args.PageSize);
             return await ListAsync(allCaseFormsSpec);
         }
 
