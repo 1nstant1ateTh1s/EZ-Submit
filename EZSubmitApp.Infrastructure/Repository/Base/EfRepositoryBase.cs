@@ -46,7 +46,7 @@ namespace EZSubmitApp.Infrastructure.Repository.Base
             return await Entities.ToListAsync();
         }
 
-        public async Task<IReadOnlyList<T>> ListAsync(ISpecification<T> spec)
+        public async Task<IReadOnlyList<T>> GetAsync(ISpecification<T> spec)
         {
             return await ApplySpecification(spec).ToListAsync();
         }
