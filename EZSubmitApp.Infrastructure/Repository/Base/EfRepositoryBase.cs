@@ -13,11 +13,28 @@ namespace EZSubmitApp.Infrastructure.Repository.Base
 {
     public class EfRepositoryBase<T, TId> : IAsyncRepositoryBase<T, TId> where T : class, IBaseEntity<TId>
     {
-        protected readonly EZSubmitDbContext _dbContext;
         public EfRepositoryBase(EZSubmitDbContext dbContext)
         {
             _dbContext = dbContext;
         }
+
+        protected readonly EZSubmitDbContext _dbContext;
+        private DbSet<T> _entities;
+
+        protected virtual DbSet<T> Entities
+        {
+            get
+            {
+                if (_entities == null)
+                    _entities = _dbContext.Set<T>();
+                
+                return _entities;
+            }
+        }
+
+        public IQueryable<T> Table => Entities;
+
+        public IQueryable<T> TableNoTracking => Entities.AsNoTracking();
 
         public virtual async Task<T> GetByIdAsync(int id)
         {

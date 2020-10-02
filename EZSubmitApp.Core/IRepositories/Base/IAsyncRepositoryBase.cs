@@ -2,6 +2,7 @@
 using EZSubmitApp.Core.Specifications.Base;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Linq.Expressions;
 using System.Threading.Tasks;
 
@@ -9,6 +10,9 @@ namespace EZSubmitApp.Core.IRepositories.Base
 {
     public interface IAsyncRepositoryBase<T, TId> : IRepository where T : IBaseEntity<TId>
     {
+        IQueryable<T> Table { get; }
+        IQueryable<T> TableNoTracking { get; }
+
         Task<T> GetByIdAsync(int id);
         Task<IReadOnlyList<T>> ListAllAsync();
         Task<IReadOnlyList<T>> ListAsync(ISpecification<T> spec);
