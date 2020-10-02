@@ -36,14 +36,14 @@ namespace EZSubmitApp.Infrastructure.Repository.Base
 
         public IQueryable<T> TableNoTracking => Entities.AsNoTracking();
 
-        public virtual async Task<T> GetByIdAsync(int id)
+        public async virtual Task<T> GetByIdAsync(TId id)
         {
-            return await _dbContext.Set<T>().FindAsync(id);
+            return await Entities.FindAsync(id);
         }
 
         public async Task<IReadOnlyList<T>> ListAllAsync()
         {
-            return await _dbContext.Set<T>().ToListAsync();
+            return await Entities.ToListAsync();
         }
 
         public async Task<IReadOnlyList<T>> ListAsync(ISpecification<T> spec)
@@ -53,7 +53,7 @@ namespace EZSubmitApp.Infrastructure.Repository.Base
 
         public async Task<T> AddAsync(T entity)
         {
-            await _dbContext.Set<T>().AddAsync(entity);
+            await Entities.AddAsync(entity);
             await _dbContext.SaveChangesAsync();
 
             return entity;
@@ -67,7 +67,7 @@ namespace EZSubmitApp.Infrastructure.Repository.Base
 
         public async Task DeleteAsync(T entity)
         {
-            _dbContext.Set<T>().Remove(entity);
+            Entities.Remove(entity);
             await _dbContext.SaveChangesAsync();
         }
 
@@ -88,7 +88,7 @@ namespace EZSubmitApp.Infrastructure.Repository.Base
 
         public async Task<bool> IfExistsAsync(Expression<Func<T, bool>> predicate)
         {
-            return await _dbContext.Set<T>().AnyAsync(predicate);
+            return await Entities.AnyAsync(predicate);
         }
 
         public async Task<bool> SaveAsync()
@@ -101,10 +101,9 @@ namespace EZSubmitApp.Infrastructure.Repository.Base
         /// </summary>
         /// <param name="spec">The specification that describes the shape of the data
         /// to be returned.</param>
-        /// <returns></returns>
         private IQueryable<T> ApplySpecification(ISpecification<T> spec)
         {
-            return SpecificationEvaluator<T, TId>.GetQuery(_dbContext.Set<T>().AsQueryable(), spec);
+            return SpecificationEvaluator<T, TId>.GetQuery(Table, spec);
         }
     }
 }
