@@ -57,31 +57,7 @@
 
 <!-- Pagination directive -->
 <mat-paginator [hidden]="!caseForms"
+               (page)="pageEvent = getData($event)"
                [pageSize]="6"
                [pageSizeOptions]="[2, 4, 6, 10, 20]"
                showFirstLastButtons></mat-paginator>
-
-<!--<table class="table table-striped" aria-labelledby="tableLabel" [hidden]="!caseForms">
-  <thead>
-    <tr>
-      <th>ID</th>
-      <th>Form Type</th>
-      <th>Case Number</th>
-      <th>Hearing Date</th>
-      <th>Plaintiff Name</th>
-      <th>Submitted By</th>
-      <th>Submission Date</th>
-    </tr>
-  </thead>
-  <tbody>
-    <tr *ngFor="let caseForm of caseForms">
-      <td>{{ caseForm.id }}</td>
-      <td>{{ caseForm.formType }}</td>
-      <td>{{ caseForm.caseNumber }}</td>
-      <td>{{ caseForm.hearingDateTime | date: displayDateFormat }}</td>
-      <td>{{ caseForm.plaintiffName }}</td>
-      <td>{{ caseForm.submittedBy?.firstName }} {{ caseForm.submittedBy?.lastName }}</td>
-      <td>{{ caseForm.submissionDateTime | date: displayDateFormat }}</td>
-    </tr>
-  </tbody>
-</table>-->

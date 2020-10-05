@@ -1,7 +1,7 @@
 import { Component, OnInit, Inject, ViewChild } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpParams } from '@angular/common/http';
 import { MatTableDataSource } from '@angular/material/table';
-import { MatPaginator } from '@angular/material/paginator';
+import { MatPaginator, PageEvent } from '@angular/material/paginator';
 
 import { CaseForm } from '../../core';
 
@@ -23,13 +23,25 @@ export class CaseFormListComponent implements OnInit {
     @Inject('BASE_URL') private baseUrl: string) { }
 
   ngOnInit(): void {
-    this.http.get<CaseForm[]>(this.baseUrl + 'api/CaseForms')
-      .subscribe(result => {
-        this.caseForms.data = result as CaseForm[];
-      }, error => console.error(error));
+    var pageEvent = new PageEvent();
+    pageEvent.pageIndex = 0;
+    pageEvent.pageSize = 10;
+
+    this.getData(pageEvent);
   }
 
-  ngAfterViewInit(): void {
-    this.caseForms.paginator = this.paginator;
+  getData(event: PageEvent) {
+    var url = this.baseUrl + 'api/CaseForms';
+    var params = new HttpParams()
+      .set("pageIndex", event.pageIndex.toString())
+      .set("pageSize", event.pageSize.toString());
+
+    this.http.get<any>(url, { params })
+      .subscribe(result => {
+        this.paginator.length = result.totalCount;
+        this.paginator.pageIndex = result.pageIndex;
+        this.paginator.pageSize = result.pageSize;
+        this.caseForms = new MatTableDataSource<CaseForm>(result.data);
+      }, error => console.error(error));
   }
 }
