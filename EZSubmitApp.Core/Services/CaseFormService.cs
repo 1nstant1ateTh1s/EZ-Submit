@@ -54,17 +54,25 @@ namespace EZSubmitApp.Core.Services
             return caseFormDtos;
         }
 
-        public async Task<IEnumerable<CaseFormDto>> GetCaseForms(PageSearchArgs args)
+        public async Task<IPagedList<CaseFormDto>> SearchCaseForms(PageSearchArgs args)
         {
             _logger.LogInformation(LoggingEvents.ListItems, "Listing case forms from database based on paging & searching arguments.");
 
-            var caseFormPagedList = await _caseFormRepo.GetCaseFormsAsync(args);
+            var caseFormPagedList = await _caseFormRepo.SearchCaseFormsAsync(args);
 
-            _logger.LogInformation(LoggingEvents.ListItems, $"Retrieved {caseFormPagedList.Count()} case forms from database.");
+            _logger.LogInformation(LoggingEvents.ListItems, $"Retrieved {caseFormPagedList.TotalCount} case forms from database.");
 
-            var caseFormDtos = _mapper.Map<IEnumerable<CaseFormDto>>(caseFormPagedList);
+            // TODO: better mapping solution between PagedList<TSource> and PagedList<TDestination> ...
+            //      ... maybe create a PagedListConverter ??
+            var caseFormDtos = _mapper.Map<IEnumerable<CaseFormDto>>(caseFormPagedList.Data);
 
-            return caseFormDtos;
+            var caseFormDtosPagedList = new StaticPagedList<CaseFormDto>(
+                caseFormDtos,
+                caseFormPagedList.TotalCount,
+                caseFormPagedList.PageIndex,
+                caseFormPagedList.PageSize);
+
+            return caseFormDtosPagedList;
         }
 
         public async Task<CaseFormDto> GetCaseFormById(int id)

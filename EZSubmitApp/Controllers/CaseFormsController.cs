@@ -28,17 +28,17 @@ namespace EZSubmitApp.Controllers
         [HttpGet]
         [HttpHead]
         //public async Task<ActionResult<IEnumerable<CaseForm>>> Get([FromQuery] PageSearchRequest request)
-        public async Task<ActionResult<IEnumerable<CaseForm>>> Get([FromQuery] PageSearchArgs request)
+        public async Task<ActionResult<IPagedList<CaseFormDto>>> Get([FromQuery] PageSearchArgs request)
         {
             var pagingArgs = request;
 
-            var caseForms = await _caseFormService.GetCaseForms(pagingArgs);
+            var caseForms = await _caseFormService.SearchCaseForms(pagingArgs);
             return Ok(caseForms);
         }
 
         // GET: api/CaseForms/5
         [HttpGet("{id}")]
-        public async Task<ActionResult<CaseForm>> Get(int id)
+        public async Task<ActionResult<CaseFormDto>> Get(int id)
         {
             var caseForm = await _caseFormService.GetCaseFormById(id);
             if (caseForm == null)

@@ -4,6 +4,7 @@ using EZSubmitApp.Core.Paging;
 using EZSubmitApp.Core.Specifications;
 using EZSubmitApp.Infrastructure.Data;
 using EZSubmitApp.Infrastructure.Repository.Base;
+using Microsoft.EntityFrameworkCore;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
@@ -28,10 +29,15 @@ namespace EZSubmitApp.Infrastructure.Repository
             return await GetAsync(allCaseFormsSpec);
         }
 
-        public async Task<IEnumerable<CaseForm>> GetCaseFormsAsync(PageSearchArgs args)
+        public async Task<IPagedList<CaseForm>> SearchCaseFormsAsync(PageSearchArgs args)
         {
-            var allCaseFormsSpec = new CaseFormWithSubmittedBySpecification(args.PageIndex * args.PageSize, args.PageSize);
-            return await GetAsync(allCaseFormsSpec);
+            // Paging & Sorting Option #1: Using specification pattern
+            //var allCaseFormsSpec = new CaseFormWithSubmittedBySpecification(args.PageIndex * args.PageSize, args.PageSize);
+            //return await GetAsync(allCaseFormsSpec);
+
+            // Paging & Sorting Option #2: Using PagedList<> instance
+            var query = Table.Include(c => c.SubmittedBy);
+            return await PagedList<CaseForm>.CreateAsync(query, args);
         }
 
         public async Task<IEnumerable<CaseForm>> GetCaseFormsByUserAsync(string userName)

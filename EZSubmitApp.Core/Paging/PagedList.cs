@@ -1,13 +1,12 @@
-﻿using EZSubmitApp.Core.Paging;
-using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace EZSubmitApp.Infrastructure.Paging
+namespace EZSubmitApp.Core.Paging
 {
-    public class PagedList<T> : IPagedList<T>
+    public class PagedList<T> : BasePagedList<T>
     {
         /// <summary>
         /// Private constructor called by the CreateAsync method.
@@ -48,45 +47,6 @@ namespace EZSubmitApp.Infrastructure.Paging
                 pagingArgs.PageIndex, 
                 pagingArgs.PageSize);
         }
-        #endregion
-
-        #region Properties
-        /// <summary>
-        /// The data result.
-        /// </summary>
-        public IEnumerable<T> Data { get; private set; }
-
-        /// <summary>
-        /// Zero-based index of current page.
-        /// </summary>
-        public int PageIndex { get; private set; }
-
-        /// <summary>
-        /// Number of items contained in each page.
-        /// </summary>
-        public int PageSize { get; private set; }
-
-        /// <summary>
-        /// Total items count
-        /// </summary>
-        public int TotalCount { get; private set; }
-
-        /// <summary>
-        /// Total pages count
-        /// </summary>
-        public int TotalPages { get; private set; }
-
-        /// <summary>
-        /// TRUE if the current page has a previous page,
-        /// FALSE otherwise.
-        /// </summary>
-        public bool HasPreviousPage => PageIndex > 0;
-
-        /// <summary>
-        /// TRUE if the current page has a next page,
-        /// FALSE otherwise.
-        /// </summary>
-        public bool HasNextPage => PageIndex + 1 < TotalPages;
         #endregion
     }
 }
