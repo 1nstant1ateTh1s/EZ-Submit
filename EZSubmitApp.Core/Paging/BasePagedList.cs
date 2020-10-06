@@ -41,6 +41,16 @@ namespace EZSubmitApp.Core.Paging
         /// FALSE otherwise.
         /// </summary>
         public bool HasNextPage => PageIndex + 1 < TotalPages;
+
+        /// <summary>
+        /// Sorting column name (or null if none set).
+        /// </summary>
+        public string SortColumn { get; set; }
+
+        /// <summary>
+        /// Sorting order ("ASC", "DESC" or null if none set).
+        /// </summary>
+        public string SortOrder { get; set; }
         #endregion
     }
 }

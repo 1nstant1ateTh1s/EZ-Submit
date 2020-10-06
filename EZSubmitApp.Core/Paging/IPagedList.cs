@@ -11,5 +11,7 @@ namespace EZSubmitApp.Core.Paging
         int TotalPages { get; }
         bool HasPreviousPage { get; }
         bool HasNextPage { get; }
+        string SortColumn { get; }
+        string SortOrder { get; }
     }
 }

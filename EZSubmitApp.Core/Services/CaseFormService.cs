@@ -54,7 +54,8 @@ namespace EZSubmitApp.Core.Services
             return caseFormDtos;
         }
 
-        public async Task<IPagedList<CaseFormDto>> SearchCaseForms(PageSearchArgs args)
+        //public async Task<IPagedList<CaseFormDto>> SearchCaseForms(PageSearchArgs args)
+        public async Task<IPagedList<CaseFormDto>> SearchCaseForms(PageSearchRequest args)
         {
             _logger.LogInformation(LoggingEvents.ListItems, "Listing case forms from database based on paging & searching arguments.");
 
@@ -70,7 +71,9 @@ namespace EZSubmitApp.Core.Services
                 caseFormDtos,
                 caseFormPagedList.TotalCount,
                 caseFormPagedList.PageIndex,
-                caseFormPagedList.PageSize);
+                caseFormPagedList.PageSize,
+                caseFormPagedList.SortColumn,
+                caseFormPagedList.SortOrder);
 
             return caseFormDtosPagedList;
         }

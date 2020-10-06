@@ -29,7 +29,8 @@ namespace EZSubmitApp.Infrastructure.Repository
             return await GetAsync(allCaseFormsSpec);
         }
 
-        public async Task<IPagedList<CaseForm>> SearchCaseFormsAsync(PageSearchArgs args)
+        //public async Task<IPagedList<CaseForm>> SearchCaseFormsAsync(PageSearchArgs args)
+        public async Task<IPagedList<CaseForm>> SearchCaseFormsAsync(PageSearchRequest args)
         {
             // Paging & Sorting Option #1: Using specification pattern
             //var allCaseFormsSpec = new CaseFormWithSubmittedBySpecification(args.PageIndex * args.PageSize, args.PageSize);
