@@ -8,6 +8,7 @@ using EZSubmitApp.Core.Entities;
 using EZSubmitApp.Core.Interfaces;
 using EZSubmitApp.Core.IRepositories;
 using EZSubmitApp.Core.Paging;
+using EZSubmitApp.Core.ResourceParameters;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
@@ -54,12 +55,11 @@ namespace EZSubmitApp.Core.Services
             return caseFormDtos;
         }
 
-        //public async Task<IPagedList<CaseFormDto>> SearchCaseForms(PageSearchArgs args)
-        public async Task<IPagedList<CaseFormDto>> SearchCaseForms(PageSearchRequest args)
+        public async Task<IPagedList<CaseFormDto>> SearchCaseForms(CaseFormParameters caseFormParams)
         {
             _logger.LogInformation(LoggingEvents.ListItems, "Listing case forms from database based on paging & searching arguments.");
 
-            var caseFormPagedList = await _caseFormRepo.SearchCaseFormsAsync(args);
+            var caseFormPagedList = await _caseFormRepo.SearchCaseFormsAsync(caseFormParams);
 
             _logger.LogInformation(LoggingEvents.ListItems, $"Retrieved {caseFormPagedList.TotalCount} case forms from database.");
 

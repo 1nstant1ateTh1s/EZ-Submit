@@ -4,6 +4,7 @@ using EZSubmitApp.Core.DTOs;
 using EZSubmitApp.Core.Entities;
 using EZSubmitApp.Core.Interfaces;
 using EZSubmitApp.Core.Paging;
+using EZSubmitApp.Core.ResourceParameters;
 using Microsoft.AspNetCore.Mvc;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
@@ -28,12 +29,9 @@ namespace EZSubmitApp.Controllers
         //  sortOrder=asc
         [HttpGet]
         [HttpHead]
-        public async Task<ActionResult<IEnumerable<CaseForm>>> Get([FromQuery] PageSearchRequest request)
-        //public async Task<ActionResult<IPagedList<CaseFormDto>>> Get([FromQuery] PageSearchArgs request)
+        public async Task<ActionResult<IPagedList<CaseFormDto>>> Get([FromQuery] CaseFormParameters requestParams)
         {
-            var pagingArgs = request;
-
-            var caseForms = await _caseFormService.SearchCaseForms(pagingArgs);
+            var caseForms = await _caseFormService.SearchCaseForms(requestParams);
             return Ok(caseForms);
         }
 

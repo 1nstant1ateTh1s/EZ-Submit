@@ -4,6 +4,11 @@
 
 <p *ngIf="!caseForms"><em>Loading...</em></p>
 
+<!-- Filter field -->
+<mat-form-field>
+  <input matInput type="text" [(value)]="globalFilter" (keyup)="doFilter($event.target.value)" placeholder="Search ..." #input />
+</mat-form-field>
+
 <table mat-table [dataSource]="caseForms" class="mat-elevation-z8" [hidden]="!caseForms"
        matSort (matSortChange)="loadData()"
        matSortActive="{{defaultSortColumn}}" matSortDirection="{{defaultSortOrder}}">
@@ -52,9 +57,24 @@
     <td mat-cell *matCellDef="let case"> {{case.submissionDateTime | date: displayDateFormat}} </td>
   </ng-container>
 
+  <!-- Transferred To State column -->
+  <ng-container matColumnDef="transferredToState">
+    <th mat-header-cell *matHeaderCellDef mat-sort-header> Transmitted To State?</th>
+    <td mat-cell *matCellDef="let case">
+      <button mat-icon-button color="primary">
+        <mat-icon class="mat-18"> {{(case.transferredToState) === true ? 'done' : ''}} </mat-icon>
+      </button>
+    </td>
+  </ng-container>
+
   <!-- The table will render one header row and one data row per data object -->
   <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
   <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+
+  <!-- Row shown when there is no matching data. -->
+  <tr class="mat-row" *matNoDataRow>
+    <td class="mat-cell" colspan="4">No data matching the filter "{{input.value}}"</td>
+  </tr>
 
 </table>
 

@@ -1,5 +1,6 @@
 ﻿using EZSubmitApp.Core.DTOs;
 using EZSubmitApp.Core.Paging;
+using EZSubmitApp.Core.ResourceParameters;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
@@ -10,8 +11,7 @@ namespace EZSubmitApp.Core.Interfaces
         Task<CaseFormDto> GetCaseFormById(int id);
         Task<byte[]> GetCaseFormAsDocx(int id);
         Task<IEnumerable<CaseFormDto>> GetCaseForms();
-        //Task<IPagedList<CaseFormDto>> SearchCaseForms(PageSearchArgs args);
-        Task<IPagedList<CaseFormDto>> SearchCaseForms(PageSearchRequest args);
+        Task<IPagedList<CaseFormDto>> SearchCaseForms(CaseFormParameters caseFormParams);
         Task<IEnumerable<CaseFormDto>> GetCaseFormsByUser(string userName);
         Task<CaseFormDto> CreateCaseForm(CaseFormForCreationDto caseFormForCreation);
         Task UpdateCaseForm(int id, CaseFormForUpdateDto caseFormForUpdate);

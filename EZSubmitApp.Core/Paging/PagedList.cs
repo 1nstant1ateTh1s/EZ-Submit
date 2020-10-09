@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Dynamic.Core;
+using System.Linq.Expressions;
 using System.Reflection;
 using System.Threading.Tasks;
 
@@ -29,16 +30,19 @@ namespace EZSubmitApp.Core.Paging
         /// Pages and/or sorts an IQueryable source.
         /// </summary>
         /// <param name="query">An IQueryable source of generic type</param>
-        /// <param name="pagingArgs">Specifies paging values</param>
+        /// <param name="pagingArgs">Specifies paging and sorting values</param>
+        /// <param name="filterList"></param>
         /// <returns>
         /// An object containing the IQueryable paged/sorted result
         /// and all the relevant paging/sorting navigation info.
         /// </returns>
         public static async Task<PagedList<T>> CreateAsync(
             IQueryable<T> query,
-            PageSearchRequest pagingArgs)
-            //PageSearchArgs pagingArgs)
+            PageSortArgs pagingArgs,
+            List<Expression<Func<T, bool>>> filterList = null)
         {
+            query = query.Where(filterList);
+
             var count = await query.CountAsync();
 
             if (!String.IsNullOrEmpty(pagingArgs.SortColumn) 
