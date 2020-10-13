@@ -62,6 +62,7 @@ namespace EZSubmitApp.Infrastructure.Repository
 
                 filterList.Add(c => c.CaseNumber.ToLower().Contains(searchString)
                                 || c.HearingDateTime.ToString().Contains(searchString)
+                                || c.PlaintiffName.ToLower().Contains(searchString)
                                 || c.SubmittedBy.FirstName.ToLower().Contains(searchString)
                                 || c.SubmittedBy.LastName.ToLower().Contains(searchString));
 
