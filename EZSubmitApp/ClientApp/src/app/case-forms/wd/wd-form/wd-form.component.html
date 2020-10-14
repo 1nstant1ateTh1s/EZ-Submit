@@ -1,1 +1,174 @@
-<p>wd-form works!</p>
+<div class="wd-page">
+  <h1>{{ pageTitle }}</h1>
+
+  <p *ngIf="this.id && !wd"><em>Loading...</em></p>
+
+  <div class="form" [formGroup]="form" (ngSubmit)="onSubmit()">
+
+    <mat-form-field>
+      <input matInput placeholder="Case Number" fromControlName="caseNumber" required />
+      <mat-error *ngIf="hasError('caseNumber', 'required')">Case Number is required</mat-error>
+    </mat-form-field>
+
+    <mat-form-field>
+      <input matInput placeholder="Choose a date" formControlName="hearingDate" required />
+      <!-- TODO: Change to Datepicker control -->
+      <mat-error *ngIf="hasError('hearingDate', 'required')">Hearing date is required</mat-error>
+    </mat-form-field>
+
+    <mat-form-field>
+      <input matInput placeholder="Choose a time" formControlName="hearingTime" required />
+      <!-- TODO: Change to MatSelect / MatOption control -->
+      <mat-error *ngIf="hasError('hearingTime', 'required')">Hearing time is required</mat-error>
+    </mat-form-field>
+
+    <!-- Plaintiff info -->
+    <h4 class="section-header">Plaintiff</h4>
+    <mat-form-field>
+      <input matInput placeholder="Plaintiff Type" formControlName="plaintiffType" />
+      <!-- TODO: Change to MatSelect / MatOption control -->
+    </mat-form-field>
+
+    <mat-form-field>
+      <input matInput placeholder="Plaintiff Name" formControlName="plaintiffName" />
+      <!-- TODO: Add Tooltip -->
+    </mat-form-field>
+
+    <mat-form-field>
+      <input matInput placeholder="Plaintiff TA/DBA" formControlName="plaintiffTaDbaType" />
+      <!-- TODO: Change to MatSelect / MatOption control -->
+    </mat-form-field>
+
+    <mat-form-field>
+      <input matInput placeholder="Plaintiff TA/DBA Name" formControlName="plaintiffTaDbaName" />
+    </mat-form-field>
+
+    <mat-form-field>
+      <input matInput placeholder="Plaintiff Address 1" formControlName="plaintiffAddress1" />
+    </mat-form-field>
+
+    <mat-form-field>
+      <input matInput placeholder="Plaintiff Address 2" formControlName="plaintiffAddress2" />
+    </mat-form-field>
+
+    <mat-form-field>
+      <!-- TODO: Phone field formatting -->
+      <input matInput placeholder="Plaintiff Phone" formControlName="plaintiffPhone" />
+    </mat-form-field>
+
+    <!-- Defendant info -->
+    <h4 class="section-header">Defendant</h4>
+    <mat-form-field>
+      <input matInput placeholder="Defendant Type" formControlName="defendantType" />
+      <!-- TODO: Change to MatSelect / MatOption control -->
+    </mat-form-field>
+
+    <mat-form-field>
+      <input matInput placeholder="Defendant Name" formControlName="defendantName" />
+    </mat-form-field>
+
+    <mat-form-field>
+      <input matInput placeholder="Defendant TA/DBA Name" formControlName="defendantTaDbaName" />
+    </mat-form-field>
+
+    <mat-form-field>
+      <input matInput placeholder="Defendant Address 1" formControlName="defendantAddress1" />
+    </mat-form-field>
+
+    <mat-form-field>
+      <input matInput placeholder="Defendant Address 2" formControlName="defendantAddress2" />
+    </mat-form-field>
+
+    <!-- TODO: Add Defendant #2 button -->
+    <!--<div class="wip-button-row" *ngIf="!isSecondDefendantAdded">
+    <button mat-icon-button color="accent" type="button" class="full-width" (click)="addDefendant()">
+      <mat-icon aria-label="Add defendant 2 icon">add_circle</mat-icon>
+      Add Defendant
+    </button>
+  </div>-->
+    <!-- Defendant #2 info -->
+    <div id="defendantTwo">
+      <!--<div id="defendantTwo" *ngIf="isSecondDefendantAdded">-->
+      <h4 class="section-header">Defendant #2</h4>
+      <mat-form-field>
+        <input matInput placeholder="Defendant #2 Type" formControlName="defendant2Type" />
+        <!-- TODO: Change to MatSelect / MatOption control -->
+      </mat-form-field>
+
+      <mat-form-field>
+        <input matInput placeholder="Defendant #2 Name" formControlName="defendant2Name" />
+      </mat-form-field>
+
+      <mat-form-field>
+        <input matInput placeholder="Defendant #2 TA/DBA Name" formControlName="defendant2TaDbaName" />
+      </mat-form-field>
+
+      <mat-form-field>
+        <input matInput placeholder="Defendant #2 Address 1" formControlName="defendant2Address1" />
+      </mat-form-field>
+
+      <mat-form-field>
+        <input matInput placeholder="Defendant #2 Address 2" formControlName="defendant2Address2" />
+      </mat-form-field>
+    </div>
+
+    <!-- Claim info -->
+    <h4 class="section-header">Claim</h4>
+    <mat-form-field>
+      <input matInput placeholder="Principle" formControlName="principle" />
+      <span matPrefix>$&nbsp;</span>
+    </mat-form-field>
+
+    <mat-form-field>
+      <input matInput placeholder="Interest" formControlName="interest" />
+      <span matSuffix>%</span>
+    </mat-form-field>
+
+    <mat-form-field>
+      <input matInput placeholder="Interest Start Date" formControlName="interestStartDate" />
+      <!-- TODO: Change to Datepicker control -->
+    </mat-form-field>
+
+    <!-- TODO: Change to Checkbox control -->
+    <input matInput placeholder="Use DOJ?" formControlName="useDoj" />
+
+    <mat-form-field>
+      <input matInput placeholder="Filing Costs" formControlName="filingCost" />
+      <span matPrefix>$&nbsp;</span>
+    </mat-form-field>
+
+    <mat-form-field>
+      <input matInput placeholder="Attorney's Fees" formControlName="attorneyFees" />
+      <span matPrefix>$&nbsp;</span>
+    </mat-form-field>
+
+    <mat-form-field>
+      <input matInput placeholder="Account Type" formControlName="accountType" />
+      <!-- TODO: Change to MatSelect / MatOption control -->
+    </mat-form-field>
+
+    <mat-form-field>
+      <!--<mat-form-field *ngIf="isOtherAcctTypeSelected">-->
+      <input matInput placeholder="Other (Explain)" formControlName="accountTypeOther" />
+    </mat-form-field>
+
+    <mat-form-field>
+      <input matInput placeholder="Homestead Exemption Waived?" formControlName="homesteadExemptionWaived" />
+      <!-- TODO: Change to MatRadioGroup / MatRadioButton control -->
+    </mat-form-field>
+
+    <br />
+
+    <div class="form-group commands">
+      <!-- Form buttons -->
+      <div class="pull-left">
+        <button mat-raised-button type="button" (click)="preview()">Preview</button>
+      </div>
+      <div class="pull-right">
+        <button mat-raised-button color="warn" type="button" [routerLink]="['/caseforms']">Cancel</button>
+        <button mat-raised-button color="primary" [disabled]="!form.valid || isSubmitting ? true : null" [innerText]="submitBtnText"></button>
+      </div>
+    </div>
+
+  </div>
+</div>

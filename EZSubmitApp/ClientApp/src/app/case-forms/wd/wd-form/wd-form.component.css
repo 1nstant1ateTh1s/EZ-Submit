@@ -1,0 +1,15 @@
+
+.section-header {
+  margin-top: 25px;
+  margin-left: 40%;
+  margin-right: 40%;
+  margin-bottom: 0px;
+  font-weight: 400;
+  color: #000000a6;
+}
+
+.commands {
+  width: 60%;
+  margin-left: 20%;
+  margin-right: 20%;
+}

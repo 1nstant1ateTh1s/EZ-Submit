@@ -30,7 +30,9 @@
   <!-- Case Number column -->
   <ng-container matColumnDef="caseNumber">
     <th mat-header-cell *matHeaderCellDef mat-sort-header> Case Number </th>
-    <td mat-cell *matCellDef="let case"> {{case.caseNumber}} </td>
+    <td mat-cell *matCellDef="let case">
+      <a [routerLink]="['/WD', case.id]"> {{case.caseNumber}} </a>
+    </td>
   </ng-container>
 
   <!-- Hearing Date/Time column -->
