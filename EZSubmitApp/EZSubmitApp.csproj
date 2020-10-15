@@ -36,6 +36,7 @@
   <ItemGroup>
     <None Remove="ClientApp\src\app\core\index.ts" />
     <None Remove="ClientApp\src\app\core\models\index.ts" />
+    <None Remove="ClientApp\src\app\core\models\option.model.ts" />
     <None Remove="ClientApp\src\app\core\models\user.model.ts" />
     <None Remove="ClientApp\src\app\core\models\wd.model.ts" />
   </ItemGroup>
@@ -56,6 +57,7 @@
   <ItemGroup>
     <TypeScriptCompile Include="ClientApp\src\app\core\index.ts" />
     <TypeScriptCompile Include="ClientApp\src\app\core\models\index.ts" />
+    <TypeScriptCompile Include="ClientApp\src\app\core\models\option.model.ts" />
     <TypeScriptCompile Include="ClientApp\src\app\core\models\user.model.ts" />
     <TypeScriptCompile Include="ClientApp\src\app\core\models\wd.model.ts" />
   </ItemGroup>

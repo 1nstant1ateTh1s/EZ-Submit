@@ -4,6 +4,13 @@
 
 <p *ngIf="!caseForms"><em>Loading...</em></p>
 
+<!-- TEMP - WILL BE REPLACED ONCE 'add-new-forms-list' COMPONENT IS CREATED. -->
+<div class="commands text-right" *ngIf="caseForms">
+  <button type="button" [routerLink]="['/WD']" class="btn btn-success">
+    Add a new Warrant in Debt
+  </button>
+</div>
+
 <!-- Filter field -->
 <mat-form-field>
   <input matInput type="text" [(value)]="globalFilter" (keyup)="doFilter($event.target.value)" placeholder="Search ..." #input />

@@ -1,6 +1,6 @@
 import { Component, OnInit, Inject } from '@angular/core';
 import { FormGroup, FormControl } from '@angular/forms';
-import { WarrantInDebtForm } from '../../../core';
+import { WarrantInDebtForm, Option } from '../../../core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { HttpClient } from '@angular/common/http';
 
@@ -29,6 +29,40 @@ export class WdFormComponent implements OnInit {
   id?: number;
 
   isSubmitting: boolean = false;
+  isOtherAcctTypeSelected: boolean = false;
+  isSecondDefendantAdded: boolean = false;
+
+  // the hearing time options for the select
+  hearingTimeOptions: Option[] = [
+    { value: '9:00 AM', display: '9:00 AM' },
+    { value: '10:00 AM', display: '10:00 AM' },
+    { value: '11:00 AM', display: '11:00 AM' }
+  ]
+
+  // the entity type options for the select
+  entityTypes: Option[] = [
+    { value: 'I', display: 'Individual' },
+    { value: 'C', display: 'Company' }
+  ]
+
+  // the ta/dba type options for the select
+  taDbaTypes: Option[] = [
+    { value: 'TA', display: 'Trading As' },
+    { value: 'DBA', display: 'Doing Business As' }
+  ]
+
+  // the account type options for the select
+  accountTypes: Option[] = [
+    { value: 'Open Account', display: 'Open Account' },
+    { value: 'Contract', display: 'Contract' },
+    { value: 'Note', display: 'Note' },
+    { value: 'Other', display: 'Other' }
+  ]
+
+  // the homestead exemption waived options for the select
+  homesteadExemptionWaivedOptions: string[] = [
+
+  ]
 
   constructor(private activatedRoute: ActivatedRoute,
               private router: Router,
@@ -77,6 +111,26 @@ export class WdFormComponent implements OnInit {
 
   hasError = (controlName: string, errorName: string) => {
     return this.form.controls[controlName].hasError(errorName);
+  }
+
+  useDojChanged() {
+    // Disable Interest Start Date control when Use DOJ option is checked
+    this.form.get('useDoj').value == true ?
+      this.form.get('interestStartDate').disable() :
+      this.form.get('interestStartDate').enable();
+  }
+
+  onAccountTypeChange(event) {
+    // Track whether 'Other' account type option is selected. If it is, then provide an add't. text input for the user
+    let selected = event.value;
+    if (selected == "Other") {
+      this.isOtherAcctTypeSelected = true;
+      this.form.get('accountTypeOther').enable();
+    }
+    else {
+      this.isOtherAcctTypeSelected = false;
+      this.form.get('accountTypeOther').disable();
+    }
   }
 
   loadData() {

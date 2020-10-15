@@ -5,6 +5,367 @@
 
   <div class="form" [formGroup]="form" (ngSubmit)="onSubmit()">
 
+    <div class="form-group">
+      <label for="caseNumber">Case Number:</label>
+      <br />
+      <input type="text" id="caseNumber"
+             formControlName="caseNumber" required
+             placeholder="Case number..."
+             class="form-control" />
+
+      <div *ngIf="hasError('caseNumber')"
+           class="invalid-feedback">
+        <div *ngIf="form.get('caseNumber').errors?.required">
+          Case Number is required.
+        </div>
+      </div>
+    </div>
+
+    <div class="form-group">
+      <label for="hearingDate">Hearing Date:</label>
+      <br />
+      <input type="text" id="hearingDate"
+             formControlName="hearingDate" required
+             placeholder="Hearing date..."
+             class="form-control" />
+
+      <div *ngIf="hasError('hearingDate')"
+           class="invalid-feedback">
+        <div *ngIf="form.get('hearingDate').errors?.required">
+          Hearing Date is required.
+        </div>
+      </div>
+    </div>
+
+    <div class="form-group">
+      <label for="hearingTime">Hearing Time:</label>
+      <br />
+      <!--<select id="hearingTime" class="form-control"
+            formControlName="hearingTime">
+      <option value="">--- Select a time ---</option>
+      <option *ngFor="let opt of hearingTimeOptions" [value]="opt.value">
+        {{ opt.display }}
+      </option>
+    </select>-->
+      <mat-form-field>
+        <mat-label>Select a time...</mat-label>
+        <mat-select id="hearingTime" formControlName="hearingTime">
+          <mat-option *ngFor="let opt of hearingTimeOptions" [value]="opt.value">
+            {{opt.display}}
+          </mat-option>
+        </mat-select>
+      </mat-form-field>
+
+      <div *ngIf="hasError('hearingTime')"
+           class="invalid-feedback">
+        <div *ngIf="form.get('hearingTime').errors?.required">
+          Hearing Time is required.
+        </div>
+      </div>
+    </div>
+
+    <!-- Plaintiff info -->
+    <h4 class="section-header">Plaintiff</h4>
+
+    <div class="form-group">
+      <label for="plaintiffType">Plaintiff Type:</label>
+      <br />
+      <mat-form-field>
+        <mat-label>Select Plaintiff Type...</mat-label>
+        <mat-select id="plaintiffType" formControlName="plaintiffType">
+          <mat-option *ngFor="let type of entityTypes" [value]="type.value">
+            {{type.display}}
+          </mat-option>
+        </mat-select>
+      </mat-form-field>
+    </div>
+
+    <div class="form-group">
+      <label for="plaintiffName">Plaintiff Name:</label>
+      <br />
+      <input type="text" id="plaintiffName"
+             formControlName="plaintiffName"
+             placeholder="Plaintiff name..."
+             class="form-control" />
+    </div>
+
+    <div class="form-group">
+      <label for="plaintiffTaDbaType">Plaintiff TA/DBA Type:</label>
+      <br />
+      <mat-form-field>
+        <mat-label>Select Plaintiff TA/DBA Type...</mat-label>
+        <mat-select id="plaintiffTaDbaType" formControlName="plaintiffTaDbaType">
+          <mat-option *ngFor="let type of taDbaTypes" [value]="type.value">
+            {{type.display}}
+          </mat-option>
+        </mat-select>
+      </mat-form-field>
+    </div>
+
+    <div class="form-group">
+      <label for="plaintiffTaDbaName">Plaintiff TA/DBA Name:</label>
+      <br />
+      <input type="text" id="plaintiffTaDbaName"
+             formControlName="plaintiffTaDbaName"
+             placeholder="Plaintiff TA/DBA name..."
+             class="form-control" />
+    </div>
+
+    <div class="form-group">
+      <label for="plaintiffAddress1">Plaintiff Address 1:</label>
+      <br />
+      <input type="text" id="plaintiffAddress1"
+             formControlName="plaintiffAddress1"
+             placeholder="Plaintiff address 1..."
+             class="form-control" />
+    </div>
+
+    <div class="form-group">
+      <label for="plaintiffAddress2">Plaintiff Address 2:</label>
+      <br />
+      <input type="text" id="plaintiffAddress2"
+             formControlName="plaintiffAddress2"
+             placeholder="Plaintiff address 2..."
+             class="form-control" />
+    </div>
+
+    <div class="form-group">
+      <label for="plaintiffPhone">Plaintiff Phone:</label>
+      <br />
+      <input type="text" id="plaintiffPhone"
+             formControlName="plaintiffPhone"
+             placeholder="Plaintiff phone..."
+             class="form-control" />
+    </div>
+
+    <!-- Defendant info -->
+    <h4 class="section-header">Defendant</h4>
+
+    <div class="form-group">
+      <label for="defendantType">Defendant Type:</label>
+      <br />
+      <mat-form-field>
+        <mat-label>Select Defendant Type...</mat-label>
+        <mat-select id="defendantType" formControlName="defendantType">
+          <mat-option *ngFor="let type of entityTypes" [value]="type.value">
+            {{type.display}}
+          </mat-option>
+        </mat-select>
+      </mat-form-field>
+    </div>
+
+    <div class="form-group">
+      <label for="defendantName">Defendant Name:</label>
+      <br />
+      <input type="text" id="defendantName"
+             formControlName="defendantName"
+             placeholder="Defendant name..."
+             class="form-control" />
+    </div>
+
+    <div class="form-group">
+      <label for="defendantTaDbaName">Defendant TA/DBAName:</label>
+      <br />
+      <input type="text" id="defendantTaDbaName"
+             formControlName="defendantTaDbaName"
+             placeholder="Defendant TA/DBA name..."
+             class="form-control" />
+    </div>
+
+    <div class="form-group">
+      <label for="defendantAddress1">Defendant Address 1:</label>
+      <br />
+      <input type="text" id="defendantAddress1"
+             formControlName="defendantAddress1"
+             placeholder="Defendant address 1..."
+             class="form-control" />
+    </div>
+
+    <div class="form-group">
+      <label for="defendantAddress2">Defendant Address 2:</label>
+      <br />
+      <input type="text" id="defendantAddress2"
+             formControlName="defendantAddress2"
+             placeholder="Defendant address 2..."
+             class="form-control" />
+    </div>
+
+    <!-- Defendant #2 info -->
+    <div id="defendantTwo">
+
+      <!--<div id="defendantTwo" *ngIf="isSecondDefendantAdded">-->
+      <h4 class="section-header">Defendant #2</h4>
+
+      <div class="form-group">
+        <label for="defendant2Type">Defendant 2 Type:</label>
+        <br />
+        <mat-form-field>
+          <mat-label>Select Defendant 2 Type...</mat-label>
+          <mat-select id="defendant2Type" formControlName="defendant2Type">
+            <mat-option *ngFor="let type of entityTypes" [value]="type.value">
+              {{type.display}}
+            </mat-option>
+          </mat-select>
+        </mat-form-field>
+      </div>
+
+      <div class="form-group">
+        <label for="defendant2Name">Defendant 2 Name:</label>
+        <br />
+        <input type="text" id="defendant2Name"
+               formControlName="defendant2Name"
+               placeholder="Defendant 2 name..."
+               class="form-control" />
+      </div>
+
+      <div class="form-group">
+        <label for="defendant2TaDbaName">Defendant 2 TA/DBAName:</label>
+        <br />
+        <input type="text" id="defendant2TaDbaName"
+               formControlName="defendant2TaDbaName"
+               placeholder="Defendant 2 TA/DBA name..."
+               class="form-control" />
+      </div>
+
+      <div class="form-group">
+        <label for="defendant2Address1">Defendant 2 Address 1:</label>
+        <br />
+        <input type="text" id="defendant2Address1"
+               formControlName="defendant2Address1"
+               placeholder="Defendant 2 address 1..."
+               class="form-control" />
+      </div>
+
+      <div class="form-group">
+        <label for="defendant2Address2">Defendant 2 Address 2:</label>
+        <br />
+        <input type="text" id="defendant2Address2"
+               formControlName="defendant2Address2"
+               placeholder="Defendant 2 address 2..."
+               class="form-control" />
+      </div>
+    </div>
+
+    <!-- Claim info -->
+    <h4 class="section-header">Claim</h4>
+
+    <div class="form-group">
+      <label for="principle">Principle:</label>
+      <br />
+      <span>$&nbsp;</span>
+      <input type="text" id="principle"
+             formControlName="principle"
+             placeholder="Principle..."
+             class="form-control" />
+    </div>
+
+    <div class="form-group">
+      <label for="interest">Interest:</label>
+      <br />
+      <input type="text" id="interest"
+             formControlName="interest"
+             placeholder="Interest..."
+             class="form-control" />
+      <span>%</span>
+    </div>
+
+    <div class="form-group">
+      <label for="interestStartDate">Interest Start Date:</label>
+      <br />
+      <label for="useDoj">Use DOJ?:</label>
+      <mat-checkbox id="useDoj" formControlName="useDoj" (change)="useDojChanged()"></mat-checkbox>
+      <input type="text" id="interestStartDate"
+             formControlName="interestStartDate"
+             placeholder="Interest Start Date..."
+             class="form-control" />
+    </div>
+
+    <!--<div class="form-group">
+      <label for="useDoj">Use DOJ?:</label>
+      <mat-checkbox id="useDoj" formControlName="useDoj" (change)="useDojChanged()"></mat-checkbox>
+    </div>-->
+
+    <div class="form-group">
+      <label for="filingCost">Filing Costs:</label>
+      <br />
+      <span>$&nbsp;</span>
+      <input type="text" id="filingCost"
+             formControlName="filingCost"
+             placeholder="Filing Costs..."
+             class="form-control" />
+    </div>
+
+    <div class="form-group">
+      <label for="attorneyFees">Attorney Fees:</label>
+      <br />
+      <span>$&nbsp;</span>
+      <input type="text" id="attorneyFees"
+             formControlName="attorneyFees"
+             placeholder="Attorney Fees..."
+             class="form-control" />
+    </div>
+
+    <div class="form-group">
+      <label for="accountType">Account Type:</label>
+      <br />
+      <mat-form-field>
+        <mat-label>Select Account Type...</mat-label>
+        <mat-select id="accountType" formControlName="accountType" (selectionChange)="onAccountTypeChange($event)">
+          <mat-option>None</mat-option>
+          <mat-option *ngFor="let type of accountTypes" [value]="type.value">
+            {{type.display}}
+          </mat-option>
+        </mat-select>
+      </mat-form-field>
+    </div>
+
+    <div class="form-group" *ngIf="isOtherAcctTypeSelected">
+      <label for="accountTypeOther">Account Type Other:</label>
+      <br />
+      <input type="text" id="accountTypeOther"
+             formControlName="accountTypeOther"
+             placeholder="Account Type Other..."
+             class="form-control" />
+    </div>
+
+    <div class="form-group">
+      <label for="homesteadExemptionWaived">Homestead Exemption Waived?:</label>
+
+      <mat-radio-group id="homesteadExemptionWaived" formControlName="homesteadExemptionWaived">
+        <mat-radio-button value="Yes">Yes</mat-radio-button>
+        <mat-radio-button value="No">No</mat-radio-button>
+        <mat-radio-button value="Cannot be determined">Cannot be determined</mat-radio-button>
+      </mat-radio-group>
+    </div>
+
+    <br />
+
+    <div class="form-group commands">
+      <!-- Form buttons -->
+
+          <!--<div class="pull-left">
+        <button mat-raised-button type="button" (click)="preview()">Preview</button>
+      </div>
+      <div class="pull-right">
+        <button mat-raised-button color="warn" type="button" [routerLink]="['/caseforms']">Cancel</button>
+        <button mat-raised-button color="primary" [disabled]="!form.valid || isSubmitting ? true : null" [innerText]="submitBtnText"></button>
+      </div>-->
+
+      <div class="pull-left">
+        <button type="button" class="btn btn-info" (click)="preview()">Preview</button>
+      </div>
+      <div class="pull-right">
+        <button type="button" class="btn btn-danger" [routerLink]="['/caseforms']">Cancel</button>
+        <button type="submit" class="btn btn-success" [disabled]="!form.valid || isSubmitting ? true : null">{{submitBtnText}}</button>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- TESTING NON-MATERIAL DESIGN APPROACH ... -->
+
+  <div class="form" [formGroup]="form" (ngSubmit)="onSubmit()" hidden="hidden">
+
     <mat-form-field>
       <input matInput placeholder="Case Number" fromControlName="caseNumber" required />
       <mat-error *ngIf="hasError('caseNumber', 'required')">Case Number is required</mat-error>
@@ -81,11 +442,11 @@
 
     <!-- TODO: Add Defendant #2 button -->
     <!--<div class="wip-button-row" *ngIf="!isSecondDefendantAdded">
-    <button mat-icon-button color="accent" type="button" class="full-width" (click)="addDefendant()">
-      <mat-icon aria-label="Add defendant 2 icon">add_circle</mat-icon>
-      Add Defendant
-    </button>
-  </div>-->
+      <button mat-icon-button color="accent" type="button" class="full-width" (click)="addDefendant()">
+        <mat-icon aria-label="Add defendant 2 icon">add_circle</mat-icon>
+        Add Defendant
+      </button>
+    </div>-->
     <!-- Defendant #2 info -->
     <div id="defendantTwo">
       <!--<div id="defendantTwo" *ngIf="isSecondDefendantAdded">-->
