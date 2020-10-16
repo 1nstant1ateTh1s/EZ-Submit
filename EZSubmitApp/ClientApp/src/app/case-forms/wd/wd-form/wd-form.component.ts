@@ -107,6 +107,11 @@ export class WdFormComponent implements OnInit {
     this.loadData();
 
     this.submitBtnText = (this.id) ? "Save" : "Create";
+
+    if (this.id) {
+      console.log('value of this.wd.defendant2Name: ' + this.wd.defendant2Name);
+    }
+    this.isSecondDefendantAdded = (this.id) && (this.wd.defendant2Name != null && this.wd.defendant2Name.trim() != ''); // set indicator if Defendant #2 section show be visible when editing an existing form
   }
 
   hasError = (controlName: string, errorName: string) => {
@@ -131,6 +136,11 @@ export class WdFormComponent implements OnInit {
       this.isOtherAcctTypeSelected = false;
       this.form.get('accountTypeOther').disable();
     }
+  }
+
+  addDefendant() {
+    // Display Defendant #2 form fields
+    this.isSecondDefendantAdded = true;
   }
 
   loadData() {
