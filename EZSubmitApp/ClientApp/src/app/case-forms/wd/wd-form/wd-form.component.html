@@ -31,14 +31,8 @@
             <input matInput [matDatepicker]="picker" id="hearingDate" formControlName="hearingDate" required />
             <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
             <mat-datepicker #picker></mat-datepicker>
+            <mat-error *ngIf="form.get('hearingDate').errors?.required">Hearing Date is required.</mat-error>
           </mat-form-field>
-
-          <div *ngIf="hasError('hearingDate')"
-               class="invalid-feedback">
-            <div *ngIf="form.get('hearingDate').errors?.required">
-              Hearing Date is required.
-            </div>
-          </div>
         </div>
       </div>
       <div class="col-md-6">
@@ -59,14 +53,8 @@
                 {{opt.display}}
               </mat-option>
             </mat-select>
+            <mat-error *ngIf="form.get('hearingTime').errors?.required">Hearing Time is required.</mat-error>
           </mat-form-field>
-
-          <div *ngIf="hasError('hearingTime')"
-               class="invalid-feedback">
-            <div *ngIf="form.get('hearingTime').errors?.required">
-              Hearing Time is required.
-            </div>
-          </div>
         </div>
       </div>
     </div>
@@ -273,6 +261,13 @@
                formControlName="principle"
                placeholder="Principle..."
                class="form-control" />
+
+        <div *ngIf="hasError('principle')"
+             class="invalid-feedback">
+          <div *ngIf="form.get('principle').errors?.pattern">
+            Please enter a valid currency amount.
+          </div>
+        </div>
       </div>
     </div>
 
@@ -285,6 +280,13 @@
                placeholder="Interest..."
                class="form-control" />
         <span class="input-group-append input-group-text">%</span>
+
+        <div *ngIf="hasError('interest')"
+             class="invalid-feedback">
+          <div *ngIf="form.get('interest').errors?.pattern">
+            Please enter a valid, 2-decimal value.
+          </div>
+        </div>
       </div>
     </div>
 
@@ -315,6 +317,14 @@
                formControlName="filingCost"
                placeholder="Filing Costs..."
                class="form-control" />
+
+        <div *ngIf="hasError('filingCost')"
+             class="invalid-feedback">
+          <div *ngIf="form.get('filingCost').errors?.pattern">
+            Please enter a valid currency amount.
+          </div>
+        </div>
+
       </div>
     </div>
 
@@ -327,6 +337,14 @@
                formControlName="attorneyFees"
                placeholder="Attorney Fees..."
                class="form-control" />
+
+        <div *ngIf="hasError('attorneyFees')"
+             class="invalid-feedback">
+          <div *ngIf="form.get('attorneyFees').errors?.pattern">
+            Please enter a valid currency amount.
+          </div>
+        </div>
+
       </div>
     </div>
 

@@ -1,5 +1,5 @@
 import { Component, OnInit, Inject } from '@angular/core';
-import { FormGroup, FormControl } from '@angular/forms';
+import { FormGroup, FormControl, Validators } from '@angular/forms';
 import { WarrantInDebtForm, Option } from '../../../core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { HttpClient } from '@angular/common/http';
@@ -72,9 +72,9 @@ export class WdFormComponent implements OnInit {
 
   ngOnInit(): void {
     this.form = new FormGroup({
-      caseNumber: new FormControl(''),
-      hearingDate: new FormControl(''),
-      hearingTime: new FormControl(''),
+      caseNumber: new FormControl('', Validators.required),
+      hearingDate: new FormControl('', Validators.required),
+      hearingTime: new FormControl('', Validators.required),
       plaintiffType: new FormControl(''),
       plaintiffName: new FormControl(''),
       plaintiffTaDbaType: new FormControl(''),
@@ -93,12 +93,12 @@ export class WdFormComponent implements OnInit {
       defendant2Address1: new FormControl(''),
       defendant2Address2: new FormControl(''),
 
-      principle: new FormControl(''),
-      interest: new FormControl(''),
+      principle: new FormControl('', Validators.pattern('\\d+\\.?\\d{0,2}$')),
+      interest: new FormControl('', Validators.pattern('\\d+\\.?\\d{0,2}$')),
       interestStartDate: new FormControl(''),
       useDoj: new FormControl(''),
-      filingCost: new FormControl(''),
-      attorneyFees: new FormControl(''),
+      filingCost: new FormControl('', Validators.pattern('\\d+\\.?\\d{0,2}$')),
+      attorneyFees: new FormControl('', Validators.pattern('\\d+\\.?\\d{0,2}$')),
       accountType: new FormControl(''),
       accountTypeOther: new FormControl(''),
       homesteadExemptionWaived: new FormControl('')
@@ -114,9 +114,22 @@ export class WdFormComponent implements OnInit {
     this.isSecondDefendantAdded = (this.id) && (this.wd.defendant2Name != null && this.wd.defendant2Name.trim() != ''); // set indicator if Defendant #2 section show be visible when editing an existing form
   }
 
-  hasError = (controlName: string, errorName: string) => {
-    return this.form.controls[controlName].hasError(errorName);
+
+  // Retrieve a FormControl
+  getControl(name: string) {
+    return this.form.get(name);
   }
+
+  // Returns TRUE if the FormControl is raising an error
+  // i.e. an invalid state after user changes
+  hasError(name: string) {
+    var e = this.getControl(name);
+    return e && (e.dirty || e.touched) && e.invalid;
+  }
+
+  //hasError = (controlName: string, errorName: string) => {
+  //  return this.form.controls[controlName].hasError(errorName);
+  //}
 
   useDojChanged() {
     // Disable Interest Start Date control when Use DOJ option is checked
