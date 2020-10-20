@@ -5,6 +5,7 @@ using EZSubmitApp.Core.Configuration;
 using EZSubmitApp.Core.Constants;
 using EZSubmitApp.Core.DTOs;
 using EZSubmitApp.Core.Entities;
+using EZSubmitApp.Core.Extensions;
 using EZSubmitApp.Core.Interfaces;
 using EZSubmitApp.Core.IRepositories;
 using EZSubmitApp.Core.Paging;
@@ -15,6 +16,7 @@ using Microsoft.Extensions.Options;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Linq.Expressions;
 using System.Threading.Tasks;
 
 namespace EZSubmitApp.Core.Services
@@ -178,5 +180,38 @@ namespace EZSubmitApp.Core.Services
             _logger.LogInformation(LoggingEvents.DeleteItem, "Case form {Id} deleted", id);
         }
 
+        public async Task<bool> IsDupeField(int id, string fieldName, string fieldValue)
+        {
+            var testIfPropExists = typeof(CaseForm).HasProperty(fieldName);
+            if (testIfPropExists) {
+                // Build up the expression clause to be used to check if exists
+
+                // Example of query we will eventually run:
+                // _context.CaseForms.Any(c => c.CaseNumber == fieldValue && c.Id != id)
+
+                var parameter = Expression.Parameter(typeof(CaseForm), "c"); // c =>
+                var fieldNameProperty = Expression.Property(parameter, fieldName); // c.[fieldName]
+                var fieldNameClause = Expression.Equal(fieldNameProperty, Expression.Constant(fieldValue)); // c.[fieldName] == [fieldValue]
+
+                // The 'Id' check will conditionally disable the 'dupe check' when the user is editing an existing case form, 
+                // since keeping a value the same would be allowed. When a new case form is being added, the Id value will always
+                // be set to 0, preventing the 'dupe check' from being disabled.
+                var idProperty = Expression.Property(parameter, "Id"); // c.Id
+                var idClause = Expression.NotEqual(idProperty, Expression.Constant(id)); // c.Id != id
+
+                // Build up the AND statement
+                var body = Expression.AndAlso(fieldNameClause, idClause); // c.[fieldName] == [fieldValue] && c.Id != id
+
+                // The final Lambda expression
+                var expression = Expression.Lambda<Func<CaseForm, bool>>(body, parameter); // c => c.[fieldName] == [fieldValue] && c.Id != id
+
+                var result = await _caseFormRepo.IfExistsAsync(expression);
+                return result;
+
+                //var result = await _caseFormRepo.IfExistsAsync(String.Format("{0} == @0 && Id == @1", fieldName, fieldValue, id));
+                //var result = await _caseFormRepo.IfExistsAsync(c => nameof(c.GetType().GetProperty(fieldName)) == fieldValue);
+            }
+            return false;
+        }
     }
 }

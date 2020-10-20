@@ -48,8 +48,6 @@ namespace EZSubmitApp.Controllers
             return Ok(caseForm);
         }
 
-        // TODO: Add a GetByUsername() method
-
         [HttpGet("{id}/docx")]
         public async Task<IActionResult> GetDocx(int id)
         {
@@ -78,26 +76,6 @@ namespace EZSubmitApp.Controllers
         [HttpPut("{id}")]
         public async Task<IActionResult> Put(int id, CaseFormForUpdateDto caseForm)
         {
-            //try
-            //{
-            //    await _context.SaveChangesAsync();
-            //    _logger.LogInformation(LoggingEvents.UpdateItem, "Case form {Id} Updated", caseForm.Id);
-            //}
-            //catch (DbUpdateConcurrencyException)
-            //{
-            //    if (!CaseFormExists(id))
-            //    {
-            //        _logger.LogWarning(LoggingEvents.UpdateItemNotFound, "UPDATE FAILED: Case form {Id} no longer exists", caseForm.Id);
-            //        return NotFound();
-            //    }
-            //    else
-            //    {
-            //        throw;
-            //    }
-            //}
-
-            //return NoContent();
-
             await _caseFormService.UpdateCaseForm(id, caseForm);
             return Ok();
         }
@@ -108,6 +86,21 @@ namespace EZSubmitApp.Controllers
         {
             await _caseFormService.DeleteCaseFormById(id);
             return NoContent();
+        }
+
+        [HttpPost]
+        [Route("IsDupeCaseForm")]
+        public async Task<bool> IsDupeCaseForm(CaseFormDto caseForm)
+        {
+            // Nothing currently implemented here ... just return false
+            return false;
+        }
+
+        [HttpPost]
+        [Route("IsDupeField")]
+        public async Task<bool> IsDupeField(int id, string fieldName, string fieldValue)
+        {
+            return await _caseFormService.IsDupeField(id, fieldName, fieldValue);
         }
     }
 }

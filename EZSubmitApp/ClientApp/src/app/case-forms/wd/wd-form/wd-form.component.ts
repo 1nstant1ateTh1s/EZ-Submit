@@ -1,8 +1,10 @@
 import { Component, OnInit, Inject } from '@angular/core';
-import { FormGroup, FormControl, Validators } from '@angular/forms';
+import { FormGroup, FormControl, Validators, AsyncValidatorFn, AbstractControl, FormBuilder } from '@angular/forms';
 import { WarrantInDebtForm, Option } from '../../../core';
 import { ActivatedRoute, Router } from '@angular/router';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpParams } from '@angular/common/http';
+import { Observable } from 'rxjs';
+import { map } from 'rxjs/operators';
 
 @Component({
   selector: 'app-wd-form',
@@ -64,45 +66,79 @@ export class WdFormComponent implements OnInit {
 
   ]
 
-  constructor(private activatedRoute: ActivatedRoute,
+  constructor(private fb: FormBuilder,
+              private activatedRoute: ActivatedRoute,
               private router: Router,
               private http: HttpClient,
               @Inject('BASE_URL') private baseUrl: string)
   { }
 
   ngOnInit(): void {
-    this.form = new FormGroup({
-      caseNumber: new FormControl('', Validators.required),
-      hearingDate: new FormControl('', Validators.required),
-      hearingTime: new FormControl('', Validators.required),
-      plaintiffType: new FormControl(''),
-      plaintiffName: new FormControl(''),
-      plaintiffTaDbaType: new FormControl(''),
-      plaintiffTaDbaName: new FormControl(''),
-      plaintiffAddress1: new FormControl(''),
-      plaintiffAddress2: new FormControl(''),
-      plaintiffPhone: new FormControl(''),
-      defendantType: new FormControl(''),
-      defendantName: new FormControl(''),
-      defendantTaDbaName: new FormControl(''),
-      defendantAddress1: new FormControl(''),
-      defendantAddress2: new FormControl(''),
-      defendant2Type: new FormControl(''),
-      defendant2Name: new FormControl(''),
-      defendant2TaDbaName: new FormControl(''),
-      defendant2Address1: new FormControl(''),
-      defendant2Address2: new FormControl(''),
+    this.form = this.fb.group({
+      caseNumber: ['', Validators.required, this.isDupeField("caseNumber")],
+      hearingDate: ['', Validators.required],
+      hearingTime: ['', Validators.required],
+      plaintiffType: [''],
+      plaintiffName: [''],
+      plaintiffTaDbaType: [''],
+      plaintiffTaDbaName: [''],
+      plaintiffAddress1: [''],
+      plaintiffAddress2: [''],
+      plaintiffPhone: [''],
+      defendantType: [''],
+      defendantName: [''],
+      defendantTaDbaName: [''],
+      defendantAddress1: [''],
+      defendantAddress2: [''],
+      defendant2Type: [''],
+      defendant2Name: [''],
+      defendant2TaDbaName: [''],
+      defendant2Address1: [''],
+      defendant2Address2: [''],
 
-      principle: new FormControl('', Validators.pattern('\\d+\\.?\\d{0,2}$')),
-      interest: new FormControl('', Validators.pattern('\\d+\\.?\\d{0,2}$')),
-      interestStartDate: new FormControl(''),
-      useDoj: new FormControl(''),
-      filingCost: new FormControl('', Validators.pattern('\\d+\\.?\\d{0,2}$')),
-      attorneyFees: new FormControl('', Validators.pattern('\\d+\\.?\\d{0,2}$')),
-      accountType: new FormControl(''),
-      accountTypeOther: new FormControl(''),
-      homesteadExemptionWaived: new FormControl('')
+      principle: ['', Validators.pattern('\\d+\\.?\\d{0,2}$')],
+      interest: ['', Validators.pattern('\\d+\\.?\\d{0,2}$')],
+      interestStartDate: [''],
+      useDoj: [''],
+      filingCost: ['', Validators.pattern('\\d+\\.?\\d{0,2}$')],
+      attorneyFees: ['', Validators.pattern('\\d+\\.?\\d{0,2}$')],
+      accountType: [''],
+      accountTypeOther: [''],
+      homesteadExemptionWaived: [''],
     });
+
+    //this.form = new FormGroup({
+    //  caseNumber: new FormControl('', Validators.required, this.isDupeField("caseNumber")),
+    //  hearingDate: new FormControl('', Validators.required),
+    //  hearingTime: new FormControl('', Validators.required),
+    //  plaintiffType: new FormControl(''),
+    //  plaintiffName: new FormControl(''),
+    //  plaintiffTaDbaType: new FormControl(''),
+    //  plaintiffTaDbaName: new FormControl(''),
+    //  plaintiffAddress1: new FormControl(''),
+    //  plaintiffAddress2: new FormControl(''),
+    //  plaintiffPhone: new FormControl(''),
+    //  defendantType: new FormControl(''),
+    //  defendantName: new FormControl(''),
+    //  defendantTaDbaName: new FormControl(''),
+    //  defendantAddress1: new FormControl(''),
+    //  defendantAddress2: new FormControl(''),
+    //  defendant2Type: new FormControl(''),
+    //  defendant2Name: new FormControl(''),
+    //  defendant2TaDbaName: new FormControl(''),
+    //  defendant2Address1: new FormControl(''),
+    //  defendant2Address2: new FormControl(''),
+
+    //  principle: new FormControl('', Validators.pattern('\\d+\\.?\\d{0,2}$')),
+    //  interest: new FormControl('', Validators.pattern('\\d+\\.?\\d{0,2}$')),
+    //  interestStartDate: new FormControl(''),
+    //  useDoj: new FormControl(''),
+    //  filingCost: new FormControl('', Validators.pattern('\\d+\\.?\\d{0,2}$')),
+    //  attorneyFees: new FormControl('', Validators.pattern('\\d+\\.?\\d{0,2}$')),
+    //  accountType: new FormControl(''),
+    //  accountTypeOther: new FormControl(''),
+    //  homesteadExemptionWaived: new FormControl('')
+    //}, null, this.isDupeCaseForm());
 
     this.loadData();
 
@@ -181,7 +217,7 @@ export class WdFormComponent implements OnInit {
   }
 
   onSubmit() {
-    var wd = (this.id) ? this.wd : <WarrantInDebtForm>{};
+    var wd = (this.id) ? this.wd : <WarrantInDebtForm>{ formType: "WD" }; // TODO: Remove use of magic formType string here
 
     console.log("onSubmit() wd obj values BEFORE Object.assign(): ");
     console.log(wd);
@@ -214,6 +250,43 @@ export class WdFormComponent implements OnInit {
         // go back to case forms list view
         this.router.navigate(['/caseforms']);
       }, error => console.error(error));
+    }
+  }
+
+  isDupeCaseForm(): AsyncValidatorFn {
+    return (control: AbstractControl): Observable<{ [key: string]: any } | null> => {
+
+      var wd = <WarrantInDebtForm>{ formType: "WD" }; // TODO: Remove use of magic formType string here
+      wd.id = (this.id) ? this.id : 0;
+      Object.assign(wd, this.form.value);
+
+      console.log("inside isDupeCaseForm() function --> wd object is: ");
+      console.log(wd);
+
+      var url = this.baseUrl + "api/CaseForms/IsDupeCaseForm";
+      return this.http.post<boolean>(url, wd).pipe(map(result => {
+
+        console.log("result from IsDupeCaseForm = ");
+        console.log(result);
+
+        return (result ? { isDupeCaseForm: true } : null);
+      }));
+    }
+  }
+
+  isDupeField(fieldName: string): AsyncValidatorFn {
+    return (control: AbstractControl): Observable<{ [key: string]: any } | null> => {
+
+      var params = new HttpParams()
+        .set("id", (this.id) ? this.id.toString() : "0")
+        .set("fieldName", fieldName)
+        .set("fieldValue", control.value);
+
+      var url = this.baseUrl + "api/CaseForms/IsDupeField";
+      return this.http.post<boolean>(url, null, { params })
+        .pipe(map(result => {
+          return (result ? { isDupeField: true } : null);
+        }));
     }
   }
 

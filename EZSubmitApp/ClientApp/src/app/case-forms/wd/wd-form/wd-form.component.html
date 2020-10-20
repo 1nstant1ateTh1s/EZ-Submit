@@ -5,6 +5,12 @@
 
   <div class="form" [formGroup]="form" (ngSubmit)="onSubmit()">
 
+    <div *ngIf="form.invalid && form.errors?.isDupeCaseForm"
+         class="alert alert-danger">
+      <strong>ERROR</strong>:
+      A case form with the same <i>case number</i> already exists.
+    </div>
+
     <div class="form-group">
       <label for="caseNumber">Case Number:</label>
       <br />
@@ -17,6 +23,9 @@
            class="invalid-feedback">
         <div *ngIf="form.get('caseNumber').errors?.required">
           Case Number is required.
+        </div>
+        <div *ngIf="form.get('caseNumber').errors?.isDupeField">
+          Case Number already exists: please choose another.
         </div>
       </div>
     </div>

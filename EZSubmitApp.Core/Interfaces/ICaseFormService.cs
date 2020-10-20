@@ -16,5 +16,6 @@ namespace EZSubmitApp.Core.Interfaces
         Task<CaseFormDto> CreateCaseForm(CaseFormForCreationDto caseFormForCreation);
         Task UpdateCaseForm(int id, CaseFormForUpdateDto caseFormForUpdate);
         Task DeleteCaseFormById(int id);
+        Task<bool> IsDupeField(int id, string fieldName, string fieldValue);
     }
 }

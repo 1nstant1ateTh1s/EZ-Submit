@@ -6,6 +6,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using System;
 using System.IO;
+using System.Reflection;
 
 namespace EZSubmitApp.Core.Extensions
 {
@@ -41,6 +42,30 @@ namespace EZSubmitApp.Core.Extensions
         public static string ToString(this DateTime? dt, string format)
         {
             return (dt == null ? "" : ((DateTime)dt).ToString(format));
+        }
+
+        /// <summary>
+        /// Extension method to determine if a given property exists on a type.
+        /// </summary>
+        /// <param name="obj">The type to inspect.</param>
+        /// <param name="propertyName">Name of the property.</param>
+        /// <param name="throwExceptionIfNotFound">Determines if an exception should be thrown if property is not found.</param>
+        /// <returns>True if the property exists, false otherwise.</returns>
+        public static bool HasProperty(this Type obj, string propertyName, bool throwExceptionIfNotFound = true)
+        {
+            var prop = obj.GetProperty(propertyName,
+                BindingFlags.IgnoreCase |
+                BindingFlags.Public |
+                BindingFlags.Instance);
+
+            if (prop == null && throwExceptionIfNotFound)
+            {
+                throw new NotSupportedException(
+                   String.Format("ERROR: Property '{0} does not exist.", propertyName)
+                   );
+            }
+
+            return prop != null;
         }
     }
 }
